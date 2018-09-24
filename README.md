@@ -1,7 +1,7 @@
 # Veza
-================================================================================
+============
 Promise based HTTP RESTful API resources modeler for the browser.
-================================================================================
+============
 ## Translations
 - [Spanish]
 
@@ -30,12 +30,12 @@ only once, in order that you could use them all over your frontend app.
 - npm 6+
 
 ### Installation
-####Install Veza through npm
+#### Install Veza through npm
 ```bash
 $ npm install --save veza
 ```
 
-####Import Veza inside your app:
+#### Import Veza inside your app:
 
 ## Usage
 ### Initializating Veza
