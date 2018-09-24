@@ -1,0 +1,28 @@
+{
+  "name": "veza",
+  "version": "0.1.0",
+  "description": "Promise based HTTP RESTful API resources modeler for the browser",
+  "main": "dist/veza.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onca-vega/veza.git"
+  },
+  "keywords": [
+    "http",
+    "promise",
+    "modeler",
+    "request",
+    "client",
+    "js",
+    "javascript"
+  ],
+  "author": "Marcos Jesús Chávez Vega",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/onca-vega/veza/issues"
+  },
+  "homepage": "https://github.com/onca-vega/veza#readme"
+}
