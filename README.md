@@ -56,7 +56,7 @@ defined user.
 So let's code:
 
 ```bash
-const myVezaModeler = new Veza({
+const myVezaModeler = new VezaJS({
   name: "yourApiModeler",
   token: {
     name: "accessToken",
