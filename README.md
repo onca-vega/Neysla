@@ -65,7 +65,9 @@ const myVezaModeler = new Veza({
 
 Let's take a look into previous code. First, we define a new instance of Veza
 (our Modeler) with some params:
+
 param | description | required | example
+------------ | ------------- | ------------ | -------------
 name | The name of our model creator | yes | "yourApiModeler"
 token | Veza can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
 token.name | The name of the token that will be appended to your model's URL | yes (if token is defined) | "accessToken"
@@ -92,7 +94,9 @@ method, which define a variable (we defined it as "modelers").
 Then, this "modelers" is used to define all our models, by calling our previous
 modeler called "yourApiModeler".
 Every API modeler has the following methods:
+
 name | description | Initializator params
+------------ | ------------- | ------------
 setModel | method that allows you to define all your API models, that receive the "static" part of your API resource | array OR string
 getToken | method that returns the token of your modeler configuration | none
 
@@ -151,7 +155,9 @@ model, that means we are making a GET request to
 "https://www.your-api.com/user/1/contact/500/phone?page=7&perPage=35&accessToken=asodug2312pu312pu3_asodq231".
 
 So let's talk about GET method features:
+
 feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the query params appended to the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
@@ -179,7 +185,9 @@ In this case, the params are used as the POST body, and the requestJson node imp
 that we want to send it as an "application/json" content.
 
 So let's talk about POST method features:
+
 feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the body params of the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
@@ -205,7 +213,9 @@ not defined, this implies that we want to send it as an
 "application/x-www-form-urlencoded" content.
 
 So let's talk about PATCH method features:
+
 feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the body params of the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
@@ -225,7 +235,9 @@ model, that means we are making a DELETE request to
 "https://www.your-api.com/user/12/contact/210?accessToken=asodug2312pu312pu3_asodq231".
 
 So let's talk about DELETE method features:
+
 feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the body params of the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
@@ -234,7 +246,9 @@ requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-url
 ### data response definition
 After we make a request, we'll receive our data defined through the following
 nodes (it's format will depend on the responseType param):
+
 node | description | type of data
+------------ | ------------- | ------------
 headers | Headers of the response | Object
 status | Request status | number
 statusText | Request status as text | string
