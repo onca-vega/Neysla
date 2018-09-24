@@ -1,4 +1,4 @@
-# vezajs
+# VezaJS
 Promise based HTTP RESTful API resources modeler for the browser.
 
 ## Translations
@@ -20,7 +20,7 @@ depending on the HTTP method used (POST, GET, PATCH, etc...), and may or may not
 need params to send, for example in order to filter, order or create new data
 inside our API database.
 
-Vezajs is a JavaScript based library which main aim is to define all your models
+VezaJS is a JavaScript based library which main aim is to define all your models
 only once, in order that you could use them all over your frontend app.
 
 ## Starting
@@ -29,19 +29,19 @@ only once, in order that you could use them all over your frontend app.
 - npm 6+
 
 ### Installation
-#### Install vezajs through npm
+#### Install VezaJS through npm
 ```bash
 $ npm install --save vezajs
 ```
 
-#### Import vezajs inside your app:
+#### Import VezaJS inside your app:
 ```bash
 import { VezaJS } from "vezajs";
 ```
 
 ## Usage
-### Initializating vezajs
-In order to explain how to use vezajs, let's define some fake resources for an API
+### Initializating VezaJS
+In order to explain how to use VezaJS, let's define some fake resources for an API
 that we want to model:
 1. Our API is under the link "https://www.your-api.com/".
 2. We have three resources on our API:
@@ -66,19 +66,19 @@ const myVezaModeler = new Veza({
 });
 ```
 
-Let's take a look into previous code. First, we define a new instance of vezajs
+Let's take a look into previous code. First, we define a new instance of VezaJS
 (our Modeler) with some params:
 
 param | description | required | example
 ------------ | ------------- | ------------ | -------------
 name | The name of our model creator | yes | "yourApiModeler"
-token | vezajs can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
+token | VezaJS can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
 token.name | The name of the token that will be appended to your model's URL | yes (if token is defined) | "accessToken"
 token.value | The value of the token that will be appended to your model's URL | yes (if token is defined) | "asodug2312pu312pu3_asodq231"
 url | The link where your API stands. This will be used to prepend all your models | yes | "https://www.your-api.com/"
 
-### Using vezajs for model definition
-It's important to know that vezajs's instance previously defined is a Promise, so,
+### Using VezaJS for model definition
+It's important to know that VezaJS's instance previously defined is a Promise, so,
 continuing with our example, you could use it like:
 
 ```bash
@@ -97,7 +97,7 @@ myVezaModeler.then(modelers => {
 }).catch(err => console.log(err));
 ```
 
-Let's take a look into previous code. First, we call our vezajs's instance "then"
+Let's take a look into previous code. First, we call our VezaJS's instance "then"
 method, which define a variable (we defined it as "modelers").
 Then, this "modelers" is used to define all our models, by calling our previous
 modeler called "yourApiModeler".
@@ -109,14 +109,14 @@ setModel | method that allows you to define all your API models, that receive th
 getToken | method that returns the token of your modeler configuration | none
 
 ### Requesting with your models
-Once we've defined all our models, it's important to know that right now vezajs
+Once we've defined all our models, it's important to know that right now VezaJS
 has support for four HTTP methods:
 - GET
 - POST
 - PATCH
 - DELETE
 
-#### GET (vezajs's get method)
+#### GET (VezaJS's get method)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -174,7 +174,7 @@ delimiters | Refers to the "dynamic" part to your API resource | undefined | arr
 params | Refers to the query params appended to the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### POST (vezajs's post method)
+#### POST (VezaJS's post method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -206,7 +206,7 @@ params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### PATCH (vezajs's patch method)
+#### PATCH (VezaJS's patch method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -235,7 +235,7 @@ params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### DELETE (vezajs's remove method)
+#### DELETE (VezaJS's remove method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
