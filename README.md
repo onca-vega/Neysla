@@ -1,4 +1,4 @@
-# Veza
+# vezajs
 Promise based HTTP RESTful API resources modeler for the browser.
 
 ## Translations
@@ -20,7 +20,7 @@ depending on the HTTP method used (POST, GET, PATCH, etc...), and may or may not
 need params to send, for example in order to filter, order or create new data
 inside our API database.
 
-Veza is a JavaScript based library which main aim is to define all your models
+Vezajs is a JavaScript based library which main aim is to define all your models
 only once, in order that you could use them all over your frontend app.
 
 ## Starting
@@ -29,16 +29,19 @@ only once, in order that you could use them all over your frontend app.
 - npm 6+
 
 ### Installation
-#### Install Veza through npm
+#### Install vezajs through npm
 ```bash
-$ npm install --save veza
+$ npm install --save vezajs
 ```
 
-#### Import Veza inside your app:
+#### Import vezajs inside your app:
+```bash
+import { VezaJS } from "vezajs";
+```
 
 ## Usage
-### Initializating Veza
-In order to explain how to use Veza, let's define some fake resources for an API
+### Initializating vezajs
+In order to explain how to use vezajs, let's define some fake resources for an API
 that we want to model:
 1. Our API is under the link "https://www.your-api.com/".
 2. We have three resources on our API:
@@ -63,33 +66,38 @@ const myVezaModeler = new Veza({
 });
 ```
 
-Let's take a look into previous code. First, we define a new instance of Veza
+Let's take a look into previous code. First, we define a new instance of vezajs
 (our Modeler) with some params:
 
 param | description | required | example
 ------------ | ------------- | ------------ | -------------
 name | The name of our model creator | yes | "yourApiModeler"
-token | Veza can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
+token | vezajs can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
 token.name | The name of the token that will be appended to your model's URL | yes (if token is defined) | "accessToken"
 token.value | The value of the token that will be appended to your model's URL | yes (if token is defined) | "asodug2312pu312pu3_asodq231"
 url | The link where your API stands. This will be used to prepend all your models | yes | "https://www.your-api.com/"
 
-### Using Veza for model definition
-It's important to know that Veza's instance previously defined is a Promise, so,
+### Using vezajs for model definition
+It's important to know that vezajs's instance previously defined is a Promise, so,
 continuing with our example, you could use it like:
 
 ```bash
 let user = null,
 userContact = null,
 userContactPhone = null;
+
 myVezaModeler.then(modelers => {
+
   user = modelers.yourApiModeler.setModel("user");
+
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
   userContactPhone = modelers.yourApiModeler.setModel([ "user", "contact", "phone" ]);
+
 }).catch(err => console.log(err));
 ```
 
-Let's take a look into previous code. First, we call our Veza's instance "then"
+Let's take a look into previous code. First, we call our vezajs's instance "then"
 method, which define a variable (we defined it as "modelers").
 Then, this "modelers" is used to define all our models, by calling our previous
 modeler called "yourApiModeler".
@@ -101,22 +109,25 @@ setModel | method that allows you to define all your API models, that receive th
 getToken | method that returns the token of your modeler configuration | none
 
 ### Requesting with your models
-Once we've defined all our models, it's important to know that right now Veza
+Once we've defined all our models, it's important to know that right now vezajs
 has support for four HTTP methods:
 - GET
 - POST
 - PATCH
 - DELETE
 
-#### GET (Veza's get method)
+#### GET (vezajs's get method)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
+
   user.get({}).then(data => console.log(data)).catch(err => console.log(err));
+
   user.get({
     delimiters: 10,
     responseType: "blob"
   }).then(data => console.log(data)).catch(err => console.log(err));
+
   user.get({
     params: {
       "order": "age",
@@ -141,6 +152,7 @@ Let's see some other examples:
 ```bash
 ...
   userContactPhone = modelers.yourApiModeler.setModel([ "user", "contact", "phone" ]);
+
   userContactPhone.get({
     delimiters: [ 1, 500 ]
     params: {
@@ -162,10 +174,11 @@ delimiters | Refers to the "dynamic" part to your API resource | undefined | arr
 params | Refers to the query params appended to the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### POST (Veza's post method)
+#### POST (vezajs's post method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
   userContact.post({
     delimiters: [ 12 ],
     requestJson: true,
@@ -189,14 +202,15 @@ So let's talk about POST method features:
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the API resource | undefined | object
+params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### PATCH (Veza's patch method)
+#### PATCH (vezajs's patch method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
   userContact.patch({
     delimiters: [ 12, 210 ],
     params: {
@@ -217,14 +231,15 @@ So let's talk about PATCH method features:
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the API resource | undefined | object
+params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### DELETE (Veza's remove method)
+#### DELETE (vezajs's remove method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
   userContact.remove({
     delimiters: [ 12, 210 ]
   }).then(data => console.log(data)).catch(err => console.log(err));
@@ -239,13 +254,13 @@ So let's talk about DELETE method features:
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the API resource | undefined | object
+params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-### data response definition
+### Data response definition
 After we make a request, we'll receive our data defined through the following
-nodes (it's format will depend on the responseType param):
+nodes (it's format will depend on the "responseType" param):
 
 node | description | type of data
 ------------ | ------------- | ------------

@@ -1,5 +1,5 @@
 {
-  "name": "veza",
+  "name": "vezajs",
   "version": "0.1.0",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "dist/veza.js",

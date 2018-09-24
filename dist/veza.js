@@ -46,7 +46,7 @@
 //   }
 // ]
 
-export const Veza = config => {
+export const VezaJS = config => {
   config = Handler.doError(config);
   if(!config){
     return;
