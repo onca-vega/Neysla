@@ -1,7 +1,6 @@
 # Veza
-============
 Promise based HTTP RESTful API resources modeler for the browser.
-============
+
 ## Translations
 - [Spanish]
 
