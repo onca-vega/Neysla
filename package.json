@@ -1,6 +1,6 @@
 {
   "name": "vezajs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "dist/veza.js",
   "scripts": {

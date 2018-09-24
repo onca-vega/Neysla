@@ -282,6 +282,43 @@ data | All data related to response | Object
 dataType | Response type | string
 url | Response url | string
 
+### Support for multiple modelers
+You can define one or more modelers in VezaJS, for example when you want to
+consume n number of API's with diferent URL's.
+Let's see an example:
+```bash
+let user = null,
+userContact = null;
+let store = null,
+storeElement = null;
+
+VezaJS([
+  {
+    name: "yourApiUserModeler",
+    token: {
+      name: "accessToken",
+      value: "asodug2312pu312pu3_asodq231"
+    },
+    url: "https://www.your-api-user.com/"
+  },
+  {
+    name: "yourApiStoreModeler",
+    url: "https://www.your-api-store.com/"
+  }
+]).then(modelers => {
+
+  user = modelers.yourApiUserModeler.setModel("user");
+  userContact = modelers.yourApiUserModeler.setModel([ "user", "contact" ]);
+
+  store = modelers.yourApiStoreModeler.setModel("store");
+  storeElement = modelers.yourApiStoreModeler.setModel([ "store", "element" ]);
+
+}).catch(err => console.log(err));
+```
+And all the previous features are available in every modeler and model defined
+in the last example. In this case, the "yourApiUserModeler" modeler is going to
+work under token Authorization, meanwhile the "yourApiStoreModeler" modeler is
+for public usage.
 
 ## Versioning
 For further information, read more about this on [semver].
