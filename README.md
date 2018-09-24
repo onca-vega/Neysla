@@ -56,18 +56,19 @@ defined user.
 So let's code:
 
 ```bash
-const myVezaModeler = new VezaJS({
+VezaJS({
+
   name: "yourApiModeler",
   token: {
     name: "accessToken",
     value: "asodug2312pu312pu3_asodq231"
   },
   url: "https://www.your-api.com/"
+
 });
 ```
 
-Let's take a look into previous code. First, we define a new instance of VezaJS
-(our Modeler) with some params:
+Let's take a look into previous code. First, we must pass all VezaJS params:
 
 param | description | required | example
 ------------ | ------------- | ------------ | -------------
@@ -78,15 +79,24 @@ token.value | The value of the token that will be appended to your model's URL |
 url | The link where your API stands. This will be used to prepend all your models | yes | "https://www.your-api.com/"
 
 ### Using VezaJS for model definition
-It's important to know that VezaJS's instance previously defined is a Promise, so,
-continuing with our example, you could use it like:
+It's important to know that VezaJS is a Promise, so, continuing with our
+example, you could use it like:
 
 ```bash
 let user = null,
 userContact = null,
 userContactPhone = null;
 
-myVezaModeler.then(modelers => {
+VezaJS({
+
+  name: "yourApiModeler",
+  token: {
+    name: "accessToken",
+    value: "asodug2312pu312pu3_asodq231"
+  },
+  url: "https://www.your-api.com/"
+
+}).then(modelers => {
 
   user = modelers.yourApiModeler.setModel("user");
 
@@ -97,11 +107,11 @@ myVezaModeler.then(modelers => {
 }).catch(err => console.log(err));
 ```
 
-Let's take a look into previous code. First, we call our VezaJS's instance "then"
-method, which define a variable (we defined it as "modelers").
-Then, this "modelers" is used to define all our models, by calling our previous
-modeler called "yourApiModeler".
-Every API modeler has the following methods:
+Let's take a look into previous code. First, we initialize VezaJS, next the
+"then" method for the Promise pass a variable (we defined it as "modelers").
+Then, this "modelers" variable is used to define all our models, by calling our
+previous modeler called "yourApiModeler". Every API modeler has the following
+methods:
 
 name | description | Initializator params
 ------------ | ------------- | ------------
