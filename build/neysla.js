@@ -10,7 +10,7 @@
 //   linkedin: https://linkedin.com/in/marcos-jesus-chavez-vega-onca
 // _____________________________________________________________________________
 
-export const Neysla = config => {
+const Neysla = config => {
   config = Handler.doError(config);
   if(!config){
     return;
@@ -249,3 +249,4 @@ class Model {
     });
   }
 }
+module.exports = Neysla;
