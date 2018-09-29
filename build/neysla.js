@@ -126,9 +126,9 @@ class Model {
     }
     return paramsRequest;
   }
-  _setBody(body){
+  _setBody(body, requestJson){
     let bodyRequest = null;
-    if(body instanceof Object && data.requestJson){                         //Definition of body for JSON
+    if(body instanceof Object && requestJson){                         //Definition of body for JSON
       bodyRequest = JSON.stringify(body);
     }
     else if(body instanceof Object){                                        //Definition of body for x-www-form-urlencoded
@@ -193,7 +193,7 @@ class Model {
     });
   }
   post(data){
-    const body = this._setBody(data.body);                                        // Handle body
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     let paramsRequest = this._setUrl(data);
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
@@ -207,7 +207,7 @@ class Model {
     });
   }
   patch(data){
-    const body = this._setBody(data.body);                                        // Handle body
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     let paramsRequest = this._setUrl(data);
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
@@ -221,7 +221,7 @@ class Model {
     });
   }
   put(data){
-    const body = this._setBody(data.body);                                        // Handle body
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     let paramsRequest = this._setUrl(data);
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
@@ -235,7 +235,7 @@ class Model {
     });
   }
   remove(data){
-    const body = this._setBody(data.body);                                        // Handle body
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     let paramsRequest = this._setUrl(data);
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
