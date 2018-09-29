@@ -12,7 +12,7 @@ las API RESTful es que los recursos deberían ser anidados:
 in this made-up example: http://greatvalley.edu/example-app/courses/2305/sections/2465
 (where section '2465' is a nested resource under course 2305)".
 
-Esta es una buena característica que nos describe como debería ser un modelo de
+Esta es una buena característica que describe como debería ser un modelo de
 recursos para consumo, debido a que, como podemos ver en la cita, "courses" y
 "sections" son partes estáticas, mientras que "2305" y "2465" son partes
 dinámicas del recurso.
@@ -327,15 +327,15 @@ responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaSc
 Después de realizar una petición, la respuesta recibida posee las siguientes
 características (el formato que tomen dependerá del parámetro "responseType"):
 
-nodo | descripciónn | tipo de dato
+nodo | descripción | tipo de dato
 ------------ | ------------- | ------------
 headers | Encabezado de la respuesta | Object
 status | Estatus de la respuesta | number
 statusText | Estatus de la respuesta como texto | string
-getHeader | Método para solicitar un header específico (necesita un argumento tipo string) | function
 data | La información del cuerpo de la respuesta | Object
 dataType | Tipo de respuesta | string
 url | Url de respuesta | string
+getHeader(:headerName) | Método para solicitar un header específico (necesita un argumento tipo string) | function
 
 ### Soporte para múltiples modeladores
 Puedes definir uno o más modeladores en Neysla, por ejemplo cuando quieres
