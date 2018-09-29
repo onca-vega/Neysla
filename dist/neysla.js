@@ -46,7 +46,7 @@
 //   }
 // ]
 
-export const VezaJS = config => {
+export const Neysla = config => {
   config = Handler.doError(config);
   if(!config){
     return;
@@ -58,11 +58,11 @@ const Handler = {
   doError(config){
     let valid = true;
     if(!(config instanceof Object || config instanceof Array)){
-      console.error(`Veza: You must set an Array of initializators, in order to use a generated Oauth2 accessToken.`);
+      console.error(`Neysla: You must set an Array of initializators, in order to use a generated Oauth2 accessToken.`);
       valid = false;
     }
     else if(config instanceof Array && !config.length){
-      console.error(`Veza: Array of initializators is empty.`);
+      console.error(`Neysla: Array of initializators is empty.`);
       valid = false;
     }
 
@@ -72,18 +72,18 @@ const Handler = {
     if(valid){
       for(let i in config){
         if(!config[i].name || typeof config[i].name !== "string" || typeof config[i].name === ""){
-          console.error(`Veza: Initializator with index ${ i } has no properly defined name.`);
+          console.error(`Neysla: Initializator with index ${ i } has no properly defined name.`);
           valid = false;
         }
         else if(!config[i].url || typeof config[i].url !== "string" || typeof config[i].url === ""){
-          console.error(`Veza: Initializator with index ${ i } has no properly defined url.`);
+          console.error(`Neysla: Initializator with index ${ i } has no properly defined url.`);
           valid = false;
         }
         else if(!config[i].token || typeof config[i].token !== "object" ||
         (typeof config[i].token === "object" && config[i].token instanceof Array) ||
         !config[i].token.name || typeof config[i].token.name !== "string" || typeof config[i].token.name === "" ||
         !config[i].token.value || typeof config[i].token.value !== "string" || typeof config[i].token.value === ""){
-          console.warn(`Veza: Initializator with index ${ i } has no properly defined token's name and/or value.
+          console.warn(`Neysla: Initializator with index ${ i } has no properly defined token's name and/or value.
           Therefore no token will be added to your models`);
           config[i].token = null;
         }
@@ -116,7 +116,7 @@ class Builder {
 class Model {
   constructor(config, name){
     if(!(name instanceof Array || typeof name === "string")){
-      console.error(`Veza: The model's name is not properly defined.`);
+      console.error(`Neysla: The model's name is not properly defined.`);
       return;
     }
     this.token = config.token;
@@ -125,11 +125,11 @@ class Model {
   }
   _setUrl(data){
     if(!(data instanceof Object)){
-      console.error(`Veza: The model's data is not properly defined.`);
+      console.error(`Neysla: The model's data is not properly defined.`);
       return;
     }
     if(data.delimiters && !(data.delimiters instanceof Array || typeof data.delimiters === "string" || typeof data.delimiters === "number")){
-      console.error(`Veza: The model's delimiters are not properly defined.`);
+      console.error(`Neysla: The model's delimiters are not properly defined.`);
       return;
     }
     if(typeof this.name === "string"){
@@ -142,7 +142,7 @@ class Model {
       data.delimiters = [];
     }
     if((!data.delimiters && this.name.length > 1) || !(this.name.length === data.delimiters.length || this.name.length - 1 === data.delimiters.length)){
-      console.error(`Veza: Incorrect relation between name and delimiters.`);
+      console.error(`Neysla: Incorrect relation between name and delimiters.`);
       return;
     }
     let lastUrl = "";

@@ -1,28 +1,31 @@
 {
-  "name": "vezajs",
-  "version": "0.1.4",
+  "name": "neysla",
+  "version": "0.1.5",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
-  "main": "dist/veza.js",
+  "main": "dist/neysla.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/onca-vega/veza.git"
+    "url": "git+https://github.com/onca-vega/Neysla.git"
   },
   "keywords": [
     "http",
+    "ajax",
+    "xhr",
     "promise",
     "modeler",
     "request",
     "client",
     "js",
-    "javascript"
+    "javascript",
+    "neysla"
   ],
   "author": "Marcos Jesús Chávez Vega",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/onca-vega/veza/issues"
+    "url": "https://github.com/onca-vega/Neysla/issues"
   },
-  "homepage": "https://github.com/onca-vega/veza#readme"
+  "homepage": "https://github.com/onca-vega/Neysla#readme"
 }

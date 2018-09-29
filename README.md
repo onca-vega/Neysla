@@ -1,4 +1,4 @@
-# VezaJS
+# Neysla
 Promise based HTTP RESTful API resources modeler for the browser.
 
 ## Translations
@@ -20,7 +20,7 @@ depending on the HTTP method used (POST, GET, PATCH, etc...), and may or may not
 need params to send, for example in order to filter, order or create new data
 inside our API database.
 
-VezaJS is a JavaScript based library which main aim is to define all your models
+Neysla is a JavaScript based library which main aim is to define all your models
 only once, in order that you could use them all over your frontend app.
 
 ## Starting
@@ -29,19 +29,19 @@ only once, in order that you could use them all over your frontend app.
 - npm 6+
 
 ### Installation
-#### Install VezaJS through npm
+#### Install Neysla through npm
 ```bash
-$ npm install --save vezajs
+$ npm install --save neysla
 ```
 
-#### Import VezaJS inside your app:
+#### Import Neysla inside your app:
 ```bash
-import { VezaJS } from "vezajs";
+import { Neysla } from "neysla";
 ```
 
 ## Usage
-### Initializating VezaJS
-In order to explain how to use VezaJS, let's define some fake resources for an API
+### Initializating Neysla
+In order to explain how to use Neysla, let's define some fake resources for an API
 that we want to model:
 1. Our API is under the link "https://www.your-api.com/".
 2. We have three resources on our API:
@@ -56,7 +56,7 @@ defined user.
 So let's code:
 
 ```bash
-VezaJS({
+Neysla({
 
   name: "yourApiModeler",
   token: {
@@ -68,18 +68,18 @@ VezaJS({
 });
 ```
 
-Let's take a look into previous code. First, we must pass all VezaJS params:
+Let's take a look into previous code. First, we must pass all Neysla params:
 
 param | description | required | example
 ------------ | ------------- | ------------ | -------------
 name | The name of our model creator | yes | "yourApiModeler"
-token | VezaJS can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
+token | Neysla can handle with an Authorization token if your API is protected | no | { name: "accessToken", value: "asodug2312pu312pu3_asodq231" }
 token.name | The name of the token that will be appended to your model's URL | yes (if token is defined) | "accessToken"
 token.value | The value of the token that will be appended to your model's URL | yes (if token is defined) | "asodug2312pu312pu3_asodq231"
 url | The link where your API stands. This will be used to prepend all your models | yes | "https://www.your-api.com/"
 
-### Using VezaJS for model definition
-It's important to know that VezaJS is a Promise, so, continuing with our
+### Using Neysla for model definition
+It's important to know that Neysla is promise based, so, continuing with our
 example, you could use it like:
 
 ```bash
@@ -87,7 +87,7 @@ let user = null,
 userContact = null,
 userContactPhone = null;
 
-VezaJS({
+Neysla({
 
   name: "yourApiModeler",
   token: {
@@ -107,7 +107,7 @@ VezaJS({
 }).catch(err => console.log(err));
 ```
 
-Let's take a look into previous code. First, we initialize VezaJS, next the
+Let's take a look into previous code. First, we initialize Neysla, next the
 "then" method for the Promise pass a variable (we defined it as "modelers").
 Then, this "modelers" variable is used to define all our models, by calling our
 previous modeler called "yourApiModeler". Every API modeler has the following
@@ -119,14 +119,14 @@ setModel | method that allows you to define all your API models, that receive th
 getToken | method that returns the token of your modeler configuration | none
 
 ### Requesting with your models
-Once we've defined all our models, it's important to know that right now VezaJS
+Once we've defined all our models, it's important to know that right now Neysla
 has support for four HTTP methods:
 - GET
 - POST
 - PATCH
 - DELETE
 
-#### GET (VezaJS's get method)
+#### GET (Neysla's get method)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -184,7 +184,7 @@ delimiters | Refers to the "dynamic" part to your API resource | undefined | arr
 params | Refers to the query params appended to the API resource | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### POST (VezaJS's post method)
+#### POST (Neysla's post method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -216,7 +216,7 @@ params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### PATCH (VezaJS's patch method)
+#### PATCH (Neysla's patch method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -245,7 +245,7 @@ params | Refers to the body params of the request | undefined | object
 responseType | [responseType] supported for JavaScript requests | "json" | string
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
 
-#### DELETE (VezaJS's remove method)
+#### DELETE (Neysla's remove method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -283,7 +283,7 @@ dataType | Response type | string
 url | Response url | string
 
 ### Support for multiple modelers
-You can define one or more modelers in VezaJS, for example when you want to
+You can define one or more modelers in Neysla, for example when you want to
 consume n number of API's with diferent URL's.
 Let's see an example:
 ```bash
@@ -292,7 +292,7 @@ userContact = null;
 let store = null,
 storeElement = null;
 
-VezaJS([
+Neysla([
   {
     name: "yourApiUserModeler",
     token: {
