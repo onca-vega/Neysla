@@ -113,17 +113,19 @@ Then, this "modelers" variable is used to define all our models, by calling our
 previous modeler called "yourApiModeler". Every API modeler has the following
 methods:
 
-name | description | Initializator params
+name | description | arguments
 ------------ | ------------- | ------------
 setModel | method that allows you to define all your API models, that receive the "static" part of your API resource | array OR string
 getToken | method that returns the token of your modeler configuration | none
 
-### Requesting with your models
-Once we've defined all our models, it's important to know that right now Neysla
-has support for four HTTP methods:
+### Requesting with the models
+Once we've defined all our models, it's important to know that Neysla has support
+for the HTTP methods:
 - GET
+- HEAD
 - POST
 - PATCH
+- PUT
 - DELETE
 
 #### GET (Neysla's get method)
@@ -176,13 +178,30 @@ On previous request we are sending delimiters and params to "userContactPhone"
 model, that means we are making a GET request to
 "https://www.your-api.com/user/1/contact/500/phone?page=7&perPage=35&accessToken=asodug2312pu312pu3_asodq231".
 
-So let's talk about GET method features:
+So let's talk about "get" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the query params appended to the API resource | undefined | object
+requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | FALSE | boolean
 responseType | [responseType] supported for JavaScript requests | "json" | string
+
+#### HEAD (Neysla's head method)
+```bash
+...
+  user = modelers.yourApiModeler.setModel("user");
+
+  user.head({
+    delimiters: 10,
+    params: {
+      "order": "age",
+      "name": "Ort"
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+Works just the same as previous method (with HEAD method implies).
 
 #### POST (Neysla's post method)
 ```bash
@@ -193,6 +212,9 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
     delimiters: [ 12 ],
     requestJson: true,
     params: {
+      "foo": "bar"
+    },
+    body: {
       "address": "Saint street 177",
       "active": false,
       "first_name": "Roberto",
@@ -201,20 +223,21 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
-On previous request we are sending delimiters and params to "userContact"
+On previous request we are sending delimiters, params and body to "userContact"
 model, that means we are making a POST request to
-"https://www.your-api.com/user/12/contact?accessToken=asodug2312pu312pu3_asodq231".
-In this case, the params are used as the POST body, and the requestJson node implies
+"https://www.your-api.com/user/12/contact?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
+In this case, the body is used as the POST body, and the requestJson node implies
 that we want to send it as an "application/json" content.
 
-So let's talk about POST method features:
+So let's talk about "post" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the request | undefined | object
-responseType | [responseType] supported for JavaScript requests | "json" | string
+body | Refers to the body of the request | undefined | object
+params | Refers to the query params appended to the API resource | undefined | object
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+responseType | [responseType] supported for JavaScript requests | "json" | string
 
 #### PATCH (Neysla's patch method)
 ```bash
@@ -236,14 +259,30 @@ In this case, the params are used as the PATCH body, and the requestJson node is
 not defined, this implies that we want to send it as an
 "application/x-www-form-urlencoded" content.
 
-So let's talk about PATCH method features:
+So let's talk about "patch" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the request | undefined | object
-responseType | [responseType] supported for JavaScript requests | "json" | string
+body | Refers to the body of the request | undefined | object
+params | Refers to the query params appended to the API resource | undefined | object
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+responseType | [responseType] supported for JavaScript requests | "json" | string
+
+#### PUT (Neysla's put method)
+```bash
+...
+  userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
+  userContact.put({
+    delimiters: [ 12, 210 ],
+    params: {
+      "active": true
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+Works just the same as previous method.
 
 #### DELETE (Neysla's remove method)
 ```bash
@@ -259,14 +298,15 @@ On previous request we are sending delimiters to "userContact"
 model, that means we are making a DELETE request to
 "https://www.your-api.com/user/12/contact/210?accessToken=asodug2312pu312pu3_asodq231".
 
-So let's talk about DELETE method features:
+So let's talk about "remove" method features:
 
-feature | description | default | supporting typeof
+feature | description | default | supporting type of data
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
-params | Refers to the body params of the request | undefined | object
-responseType | [responseType] supported for JavaScript requests | "json" | string
+body | Refers to the body of the request | undefined | object
+params | Refers to the query params appended to the API resource | undefined | object
 requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+responseType | [responseType] supported for JavaScript requests | "json" | string
 
 ### Data response definition
 After we make a request, we'll receive our data defined through the following
@@ -274,17 +314,17 @@ nodes (it's format will depend on the "responseType" param):
 
 node | description | type of data
 ------------ | ------------- | ------------
-headers | Headers of the response | Object
-status | Request status | number
-statusText | Request status as text | string
-getHeader | Method to request an specific header (needs an string argument) | Function
-data | All data related to response | Object
+headers | Response Headers | Object
+status | Response status | number
+statusText | Response status as text | string
+getHeader | Method to get an specific header (needs an string argument) | Function
+data | Response body data | Object
 dataType | Response type | string
 url | Response url | string
 
 ### Support for multiple modelers
 You can define one or more modelers in Neysla, for example when you want to
-consume n number of API's with diferent URL's.
+consume more that one API.
 Let's see an example:
 ```bash
 let user = null,
@@ -321,7 +361,7 @@ work under token Authorization, meanwhile the "yourApiStoreModeler" modeler is
 for public usage.
 
 ## Versioning
-For further information, read more about this on [semver].
+For further information, read [semver].
 
 ## Authors
 * **Marcos Jesús Chávez V** - [onca-vega]
@@ -329,7 +369,7 @@ For further information, read more about this on [semver].
 ## License
 MIT license.
 
-[Spanish]: docs/spanish/README.md
+[Spanish]: ./docs/spanish/README.md
 [semver]: https://semver.org/spec/v2.0.0.html
 [onca-vega]: https://github.com/onca-vega
 [RESTful API Strategy]: https://github.com/restfulapi/api-strategy
