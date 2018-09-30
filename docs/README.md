@@ -39,7 +39,7 @@ $ npm install --save neysla
 
 #### Importación de Neysla dentro de tu aplicación:
 ```bash
-import { Neysla } from "neysla";
+import Neysla from "neysla";
 ```
 
 ## Uso
