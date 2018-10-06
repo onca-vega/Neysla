@@ -3,6 +3,7 @@
 [![Node version](https://img.shields.io/badge/package-v2.1.8-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
+
 Modelador de recursos basados en promesas para consumo de API HTTP RESTful para
 el navegador.
 
