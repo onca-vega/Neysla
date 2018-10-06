@@ -5,8 +5,7 @@
   "main": "build/neysla.min.js",
   "scripts": {
     "build": "uglifyjs app/neysla.js --compress --mangle --output build/neysla.min.js --wrap Neysla",
-    "test": "karma start",
-    "server": "node app/spec/manual/server.js"
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
