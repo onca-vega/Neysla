@@ -228,7 +228,7 @@ describe("Neysla: model POST", () => {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
       status: 201,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         "X-Pagination-Current-Page": 117
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
@@ -246,7 +246,6 @@ describe("Neysla: model POST", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.post({
         delimiters: [5, "10"],
-        responseType: "plain",
         params: {
           "foo": "bar",
           "barz": 5
