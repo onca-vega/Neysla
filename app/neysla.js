@@ -10,19 +10,24 @@
 //   linkedin: https://linkedin.com/in/marcos-jesus-chavez-vega-onca
 // _____________________________________________________________________________
 
-const Neysla = config => {
-  config = Handler.doError(config);
-  if(!config){
-    return;
+class Neysla {
+  constructor(config){
+    this.config = config;
   }
-  const Service = Handler.doService(config);
-  return new Promise((next, stop) => Service ? next(Service) : stop(Service));
-};
-const Handler = {
-  doError(config){
+
+  init(){
+    this.config = this._doError(this.config);
+    if(!this.config){
+      return false;
+    }
+    const Service = this._doService(this.config);
+    return new Promise(next => next(Service));
+  }
+
+  _doError(config){
     let valid = true;
     if(!(config instanceof Object || config instanceof Array)){
-      console.error(`Neysla: You must set an Array of initializators, in order to use a generated Oauth2 accessToken.`);
+      console.error(`Neysla: You must set an Array or an Object to initializate your modelers.`);
       valid = false;
     }
     else if(config instanceof Array && !config.length){
@@ -47,25 +52,24 @@ const Handler = {
         (typeof config[i].token === "object" && config[i].token instanceof Array) ||
         !config[i].token.name || typeof config[i].token.name !== "string" || typeof config[i].token.name === "" ||
         !config[i].token.value || typeof config[i].token.value !== "string" || typeof config[i].token.value === ""){
-          console.warn(`Neysla: Initializator with index ${ i } has no properly defined token's name and/or value.
-          Therefore no token will be added to your models`);
+          console.warn(`Neysla: Initializator with index ${ i } has no properly defined token's name and/or value. Therefore no token will be added to your models`);
           config[i].token = null;
         }
       }
     }
     return valid ? config : false;
-  },
-  doService(config){
+  }
+  _doService(config){
     const Service = {};
     for(const o of config){
       Service[o.name] = this._setBuilder(o);
     }
     return Service;
-  },
+  }
   _setBuilder(config){
     return new Builder({ url: config.url, token: config.token });
   }
-};
+}
 class Builder {
   constructor(config){
     this.config = config;
@@ -74,30 +78,26 @@ class Builder {
     return this.config.token;
   }
   setModel(name){
+    if(!(name instanceof Array || typeof name === "string")){
+      console.error(`Neysla: The model's name is not properly defined.`);
+      return false;
+    }
     return new Model(this.config, name);
   }
 }
 class Model {
   constructor(config, name){
-    if(!(name instanceof Array || typeof name === "string")){
-      console.error(`Neysla: The model's name is not properly defined.`);
-      return;
-    }
     this.token = config.token;
     this.name = name;
     this.url = config.url;
   }
   _setUrl(data){
     if(!(data instanceof Object)){
-      console.error(`Neysla: The model's data is not properly defined.`);
-      return;
+      data = {};
     }
-    if(data.delimiters && !(data.delimiters instanceof Array || typeof data.delimiters === "string" || typeof data.delimiters === "number")){
+    else if(data.delimiters && !(data.delimiters instanceof Array || typeof data.delimiters === "string" || typeof data.delimiters === "number")){
       console.error(`Neysla: The model's delimiters are not properly defined.`);
-      return;
-    }
-    if(typeof this.name === "string"){
-      this.name = [ this.name ];
+      return false;
     }
     if(data.delimiters && !(data.delimiters instanceof Array)){
       data.delimiters = [ data.delimiters ];
@@ -105,9 +105,12 @@ class Model {
     else if(!data.delimiters){
       data.delimiters = [];
     }
-    if((!data.delimiters && this.name.length > 1) || !(this.name.length === data.delimiters.length || this.name.length - 1 === data.delimiters.length)){
+    if(typeof this.name === "string"){
+      this.name = [ this.name ];
+    }
+    if(!(this.name.length === data.delimiters.length || this.name.length - 1 === data.delimiters.length)){
       console.error(`Neysla: Incorrect relation between name and delimiters.`);
-      return;
+      return false;
     }
     let serviceRequest = "";
     for(let i in this.name){
@@ -137,7 +140,7 @@ class Model {
     }
     return bodyRequest;
   }
-  _handleResponse(request, next, stop){
+  _handleResponse(request, next, stop, url){
     const response = {
       headers: {},
       status: request.status,
@@ -145,7 +148,8 @@ class Model {
       getHeader: (t) => request.getResponseHeader(t),
       data: request.response,
       dataType: request.responseType,
-      url: request.responseURL
+      responseURL: request.responseURL,
+      requestURL: url
     };
     let headersArray = request.getAllResponseHeaders().split("\r\n");
     for(const o of headersArray){
@@ -159,15 +163,18 @@ class Model {
   _executeRequest(needs){
     return new Promise((next, stop) => {
       const request = new XMLHttpRequest();
-      request.addEventListener("loadend", () => this._handleResponse(request, next, stop));     //Handle response
+      request.addEventListener("loadend", () => this._handleResponse(request, next, stop, this.url + needs.paramsRequest));     //Handle response
       request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
       request.open(needs.method, this.url + needs.paramsRequest, true); // true for asynchronous
       request.setRequestHeader("Content-Type", needs.requestJson ? "application/json" : "application/x-www-form-urlencoded");    //Set header content type
       request.send(needs.body);                       //Send request
     });
   }
-  get(data){
+  get(data = {}){
     let paramsRequest = this._setUrl(data);     // Set particular last URL
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
@@ -179,8 +186,11 @@ class Model {
       body: null
     });
   }
-  head(data){
+  head(data = {}){
     let paramsRequest = this._setUrl(data);     // Set particular last URL
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
@@ -192,12 +202,15 @@ class Model {
       body: null
     });
   }
-  post(data){
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+  post(data = {}){
     let paramsRequest = this._setUrl(data);
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     return this._executeRequest({
       method: "POST",
       requestJson: data.requestJson,
@@ -206,12 +219,15 @@ class Model {
       body
     });
   }
-  patch(data){
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+  patch(data = {}){
     let paramsRequest = this._setUrl(data);
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     return this._executeRequest({
       method: "PATCH",
       requestJson: data.requestJson,
@@ -220,12 +236,15 @@ class Model {
       body
     });
   }
-  put(data){
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+  put(data = {}){
     let paramsRequest = this._setUrl(data);
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     return this._executeRequest({
       method: "PUT",
       requestJson: data.requestJson,
@@ -234,12 +253,15 @@ class Model {
       body
     });
   }
-  remove(data){
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+  remove(data = {}){
     let paramsRequest = this._setUrl(data);
+    if(paramsRequest === false){
+      return paramsRequest;
+    }
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    const body = this._setBody(data.body, data.requestJson);                      // Handle body
     return this._executeRequest({
       method: "DELETE",
       requestJson: data.requestJson,

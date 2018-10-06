@@ -1,4 +1,8 @@
 # Neysla
+[![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.1.8-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
+[![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
 Promise based HTTP RESTful API resources modeler for the browser.
 
 ## Translations
@@ -56,7 +60,7 @@ defined user.
 So let's code:
 
 ```bash
-Neysla({
+const neysla = new Neysla({
 
   name: "yourApiModeler",
   token: {
@@ -65,7 +69,7 @@ Neysla({
   },
   url: "https://www.your-api.com/"
 
-});
+}).init();
 ```
 
 Let's take a look into previous code. First, we must pass all Neysla params:
@@ -78,6 +82,8 @@ token.name | The name of the token that will be appended to your model's URL | y
 token.value | The value of the token that will be appended to your model's URL | yes (if token is defined) | "asodug2312pu312pu3_asodq231"
 url | The link where your API stands. This will be used to prepend all your models | yes | "https://www.your-api.com/"
 
+And then call "init" method, to build our modelers.
+
 ### Using Neysla for model definition
 It's important to know that Neysla is promise based, so, continuing with our
 example, you could use it like:
@@ -87,7 +93,7 @@ let user = null,
 userContact = null,
 userContactPhone = null;
 
-Neysla({
+const neysla = new Neysla({
 
   name: "yourApiModeler",
   token: {
@@ -96,7 +102,8 @@ Neysla({
   },
   url: "https://www.your-api.com/"
 
-}).then(modelers => {
+}).init();
+neysla.then(modelers => {
 
   user = modelers.yourApiModeler.setModel("user");
 
@@ -332,7 +339,7 @@ userContact = null;
 let store = null,
 storeElement = null;
 
-Neysla([
+const neysla = new Neysla([
   {
     name: "yourApiUserModeler",
     token: {
@@ -345,7 +352,8 @@ Neysla([
     name: "yourApiStoreModeler",
     url: "https://www.your-api-store.com/"
   }
-]).then(modelers => {
+]).init();
+neysla.then(modelers => {
 
   user = modelers.yourApiUserModeler.setModel("user");
   userContact = modelers.yourApiUserModeler.setModel([ "user", "contact" ]);
@@ -369,7 +377,7 @@ For further information, read [semver].
 ## License
 MIT license.
 
-[Spanish]: ./docs/spanish/README.md
+[Spanish]: https://github.com/onca-vega/Neysla/blob/master/docs/README.md
 [semver]: https://semver.org/spec/v2.0.0.html
 [onca-vega]: https://github.com/onca-vega
 [RESTful API Strategy]: https://github.com/restfulapi/api-strategy
