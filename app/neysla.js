@@ -148,8 +148,7 @@ class Model {
       getHeader: (t) => request.getResponseHeader(t),
       data: request.response,
       dataType: request.responseType,
-      responseURL: request.responseURL,
-      requestURL: url
+      url
     };
     let headersArray = request.getAllResponseHeaders().split("\r\n");
     for(const o of headersArray){
@@ -162,10 +161,11 @@ class Model {
   }
   _executeRequest(needs){
     return new Promise((next, stop) => {
+      const url = this.url + needs.paramsRequest;
       const request = new XMLHttpRequest();
-      request.addEventListener("loadend", () => this._handleResponse(request, next, stop, this.url + needs.paramsRequest));     //Handle response
+      request.addEventListener("loadend", () => this._handleResponse(request, next, stop, url));     //Handle response
       request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
-      request.open(needs.method, this.url + needs.paramsRequest, true); // true for asynchronous
+      request.open(needs.method, url, true); // true for asynchronous
       request.setRequestHeader("Content-Type", needs.requestJson ? "application/json" : "application/x-www-form-urlencoded");    //Set header content type
       request.send(needs.body);                       //Send request
     });

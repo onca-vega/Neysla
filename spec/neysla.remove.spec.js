@@ -217,7 +217,7 @@ describe("Neysla: model REMOVE", () => {
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
         expect(success.statusText).toBe("No Content");
-        expect(success.requestURL).toBe(response.url);
+        expect(success.url).toBe(response.url);
         done();
       });
     });
@@ -249,11 +249,10 @@ describe("Neysla: model REMOVE", () => {
       });
       server.respond();
       result.catch(error => {
-        console.log(error);
         expect(error instanceof Object).toBe(true);
         expect(error.status).toBe(response.status);
         expect(error.statusText).toBe("Unauthorized");
-        expect(error.requestURL).toBe(response.url);
+        expect(error.url).toBe(response.url);
         done();
       });
     });

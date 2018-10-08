@@ -214,7 +214,7 @@ describe("Neysla: model GET", () => {
         expect(success.data[0].comment).toBe(response.data[0].comment);
         expect(success.status).toBe(response.status);
         expect(success.statusText).toBe("OK");
-        expect(success.requestURL).toBe(response.url);
+        expect(success.url).toBe(response.url);
         done();
       });
     });
@@ -257,7 +257,7 @@ describe("Neysla: model GET", () => {
         expect(success.data[0].comment).toBe(response.data[0].comment);
         expect(success.status).toBe(response.status);
         expect(success.statusText).toBe("OK");
-        expect(success.requestURL).toBe(response.url);
+        expect(success.url).toBe(response.url);
         done();
       });
     });
@@ -292,7 +292,7 @@ describe("Neysla: model GET", () => {
         expect(error instanceof Object).toBe(true);
         expect(error.status).toBe(response.status);
         expect(error.statusText).toBe("Not Found");
-        expect(error.requestURL).toBe(response.url);
+        expect(error.url).toBe(response.url);
         done();
       });
     });

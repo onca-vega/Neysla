@@ -329,7 +329,7 @@ statusText | Response status as text | string
 getHeader | Method to get an specific header (needs an string argument) | Function
 data | Response body data | Object
 dataType | Response type | string
-url | Response url | string
+url | Requested URL | string
 
 ### Support for multiple modelers
 You can define one or more modelers in Neysla, for example when you want to

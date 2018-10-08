@@ -343,7 +343,7 @@ status | Estatus de la respuesta | number
 statusText | Estatus de la respuesta como texto | string
 data | La información del cuerpo de la respuesta | Object
 dataType | Tipo de respuesta | string
-url | Url de respuesta | string
+url | URL a donde se realizó la petición | string
 getHeader(:headerName) | Método para solicitar un header específico (necesita un argumento tipo string) | function
 
 ### Soporte para múltiples modeladores

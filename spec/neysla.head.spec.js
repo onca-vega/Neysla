@@ -212,7 +212,7 @@ describe("Neysla: model HEAD", () => {
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
         expect(success.statusText).toBe("OK");
-        expect(success.requestURL).toBe(response.url);
+        expect(success.url).toBe(response.url);
         done();
       });
     });
@@ -253,7 +253,7 @@ describe("Neysla: model HEAD", () => {
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
         expect(success.statusText).toBe("OK");
-        expect(success.requestURL).toBe(response.url);
+        expect(success.url).toBe(response.url);
         done();
       });
     });
@@ -285,11 +285,10 @@ describe("Neysla: model HEAD", () => {
       });
       server.respond();
       result.catch(error => {
-        console.log(error);
         expect(error instanceof Object).toBe(true);
         expect(error.status).toBe(response.status);
         expect(error.statusText).toBe("Internal Server Error");
-        expect(error.requestURL).toBe(response.url);
+        expect(error.url).toBe(response.url);
         done();
       });
     });
