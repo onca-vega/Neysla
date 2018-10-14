@@ -1,6 +1,6 @@
 # Neysla
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v2.2.0-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.3.0-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://travis-ci.org/onca-vega/Neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
@@ -199,7 +199,7 @@ características | descripción | valor por defecto | tipo de dato soportado
 ------------ | ------------- | ------------ | -------------
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
-requestJson | TRUE para definir el contenido como "application/json"; FALSE para definirlo como "application/x-www-form-urlencoded" | false | boolean
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
 #### HEAD (Método "head" de Neysla)
@@ -226,7 +226,7 @@ conlleva el método HEAD).
 
   userContact.post({
     delimiters: [ 12 ],
-    requestJson: true,
+    requestType: "multipart",
     params: {
       "foo": "bar"
     },
@@ -243,8 +243,8 @@ En la petición anterior estamos enviando "delimiters", "params" y "body" al mod
 "userContact", lo que significa que estamos haciendo una petición POST a
 "https://www.your-api.com/user/12/contact?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
 En este caso, "body" es usado como el cuerpo de la petición, y el nodo
-"requestJson" implica que queremos enviarlo como un contenido de tipo
-"application/json".
+"requestType" implica que queremos enviarlo como un contenido de tipo
+"multipart/form-data".
 
 Con lo anterior podemos definir las características del método "post":
 
@@ -253,7 +253,7 @@ características | descripción | valor por defecto | tipo de dato soportado
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
-requestJson | TRUE para definir el contenido como "application/json"; FALSE para definirlo como "application/x-www-form-urlencoded" | FALSE | boolean
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
 #### PATCH (Petición "patch" de Neysla)
@@ -276,7 +276,7 @@ En la petición anterior estamos enviando "delimiters", "params" y "body" al mod
 "userContact", lo que significa que estamos haciendo una petición PATCH a
 "https://www.your-api.com/user/12/contact/210?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
 En este caso, "body" es usado como el cuerpo de la petición, y el nodo
-"requestJson" no está definido, lo cual implica que queremos enviarlo como un
+"requestType" no está definido, lo cual implica que queremos enviarlo como un
 contenido de tipo "application/x-www-form-urlencoded".
 
 Con lo anterior podemos definir las características del método "patch":
@@ -286,7 +286,7 @@ características | descripción | valor por defecto | tipo de dato soportado
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
-requestJson | TRUE para definir el contenido como "application/json"; FALSE para definirlo como "application/x-www-form-urlencoded" | FALSE | boolean
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
 #### PUT (Método "put" de Neysla)
@@ -329,8 +329,32 @@ características | descripción | valor por defecto | tipo de dato soportado
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
-requestJson | TRUE para definir el contenido como "application/json"; FALSE para definirlo como "application/x-www-form-urlencoded" | FALSE | boolean
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
+
+### Progreso del envío de datos
+Cada modelo cuenta con el método "progress", el cual transmite la variable definida por el evento nativo "progress" en AJAX.
+Ejemplo:
+```bash
+...
+  const file = document.getElementById("myFile").files[0];
+  userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
+  userContact.post({
+    delimiters: [ 12, 210 ],
+    params: {
+      "foo": "bar"
+    },
+    body: {
+      file,
+      name: "My file"
+    },
+    progress(progressEv){
+      // Algún código divertido con el evento "progress".
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
 
 ### Definición de la respuesta
 Después de realizar una petición, la respuesta recibida posee las siguientes

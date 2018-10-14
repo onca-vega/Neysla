@@ -1,6 +1,6 @@
 # Neysla
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v2.2.0-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.3.0-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://travis-ci.org/onca-vega/Neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
@@ -193,7 +193,7 @@ feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the query params appended to the API resource | undefined | object
-requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | FALSE | boolean
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
 #### HEAD (Neysla's head method)
@@ -219,7 +219,7 @@ Works just the same as previous method (with HEAD method implies).
 
   userContact.post({
     delimiters: [ 12 ],
-    requestJson: true,
+    requestType: "multipart",
     params: {
       "foo": "bar"
     },
@@ -235,8 +235,8 @@ Works just the same as previous method (with HEAD method implies).
 On previous request we are sending delimiters, params and body to "userContact"
 model, that means we are making a POST request to
 "https://www.your-api.com/user/12/contact?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
-In this case, the body is used as the POST body, and the requestJson node implies
-that we want to send it as an "application/json" content.
+In this case, the body is used as the POST body, and the requestType node implies
+that we want to send it's content as "multipart/form-data".
 
 So let's talk about "post" method features:
 
@@ -245,7 +245,7 @@ feature | description | default | supporting typeof
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object
-requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
 #### PATCH (Neysla's patch method)
@@ -264,7 +264,7 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
 On previous request we are sending delimiters and params to "userContact"
 model, that means we are making a PATCH request to
 "https://www.your-api.com/user/12/contact/210?accessToken=asodug2312pu312pu3_asodq231".
-In this case, the params are used as the PATCH body, and the requestJson node is
+In this case, the params are used as the PATCH body, and the requestType node is
 not defined, this implies that we want to send it as an
 "application/x-www-form-urlencoded" content.
 
@@ -275,7 +275,7 @@ feature | description | default | supporting typeof
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object
-requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
 #### PUT (Neysla's put method)
@@ -314,8 +314,32 @@ feature | description | default | supporting type of data
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object
-requestJson | TRUE for "application/json"; FALSE for "application/x-www-form-urlencoded" | false | boolean
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
+
+### Data transmition progress
+Every model has a method named "progress", that pass the variable defined by "progress" native AJAX event:
+```bash
+...
+  const file = document.getElementById("myFile").files[0];
+  userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
+
+  userContact.post({
+    delimiters: [ 12, 210 ],
+    params: {
+      "foo": "bar"
+    },
+    body: {
+      file,
+      name: "My file"
+    },
+    progress(progressEv){
+      // Some funny code to work with progress event.
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+
+...
+```
 
 ### Data response definition
 After we make a request, we'll receive our data defined through the following

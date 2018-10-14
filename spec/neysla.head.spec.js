@@ -196,7 +196,7 @@ describe("Neysla: model HEAD", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.head({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "multipart",
         params: {
           "foo": "bar",
           "barz": 5
@@ -237,7 +237,7 @@ describe("Neysla: model HEAD", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.head({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5
@@ -277,7 +277,7 @@ describe("Neysla: model HEAD", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.head({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5

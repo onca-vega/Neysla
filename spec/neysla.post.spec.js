@@ -196,7 +196,7 @@ describe("Neysla: model POST", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.post({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "multipart",
         params: {
           "foo": "bar",
           "barz": 5
@@ -290,7 +290,6 @@ describe("Neysla: model POST", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.post({
         delimiters: [5, "10"],
-        requestJson: true,
         params: {
           "foo": "bar",
           "barz": 5

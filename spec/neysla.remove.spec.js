@@ -201,7 +201,7 @@ describe("Neysla: model REMOVE", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.remove({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "multipart",
         params: {
           "foo": "bar",
           "barz": 5
@@ -241,7 +241,6 @@ describe("Neysla: model REMOVE", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.remove({
         delimiters: [5, "10"],
-        requestJson: true,
         params: {
           "foo": "bar",
           "barz": 5

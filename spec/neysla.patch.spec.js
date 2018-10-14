@@ -201,7 +201,6 @@ describe("Neysla: model PATCH", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, "10"],
-        requestJson: true,
         params: {
           "foo": "bar",
           "barz": 5
@@ -241,10 +240,16 @@ describe("Neysla: model PATCH", () => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, "10"],
-        requestJson: true,
+        requestType: "json",
+        responseType: "text",
         params: {
           "foo": "bar",
           "barz": 5
+        },
+        body: {
+          name: "My name",
+          age: 25,
+          country: "MX"
         }
       });
       server.respond();

@@ -129,18 +129,53 @@ class Model {
     }
     return paramsRequest;
   }
-  _setBody(body, requestJson){
+  _setBody(body, requestType){
     let bodyRequest = null;
-    if(body instanceof Object && requestJson){                         //Definition of body for JSON
-      bodyRequest = JSON.stringify(body);
-    }
-    else if(body instanceof Object){                                        //Definition of body for x-www-form-urlencoded
-      bodyRequest = "";
-      Object.keys(body).forEach(key => bodyRequest += `${ bodyRequest !== "" ? "&": "" }${ key }=${ body[key] }`);
+    if(body instanceof Object){
+      switch (requestType) {
+        case "json":                                    //Definition of body for JSON
+          bodyRequest = JSON.stringify(body);
+          break;
+        case "multipart":                               //Definition of body for multipart
+          bodyRequest = new FormData();
+          Object.keys(body).forEach(key => bodyRequest.append(key, body[key]));
+          break;
+        default:                                        //Definition of body for x-www-form-urlencoded
+          bodyRequest = "";
+          Object.keys(body).forEach(key => bodyRequest += `${ bodyRequest !== "" ? "&": "" }${ key }=${ body[key] }`);
+      }
     }
     return bodyRequest;
   }
-  _handleResponse(request, next, stop, url){
+  _handleRequest(requestType){
+    let finalType;
+    switch (requestType) {
+      case "json":
+        finalType = "application/json";
+        break;
+      case "multipart":
+        finalType = "multipart/form-data";
+        break;
+      default:
+        finalType = "application/x-www-form-urlencoded";
+    }
+    return finalType;
+  }
+  _executeRequest(needs){
+    return new Promise((next, stop) => {
+      const url = this.url + needs.paramsRequest;
+      const request = new XMLHttpRequest();
+      request.addEventListener("progress", needs.progress);
+      request.addEventListener("abort", () => this._handleResponse(request, next, stop, url, true));
+      request.addEventListener("error", () => this._handleResponse(request, next, stop, url, true));
+      request.addEventListener("load", () => this._handleResponse(request, next, stop, url));     //Handle response
+      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
+      request.open(needs.method, url, true); // true for asynchronous
+      request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
+      request.send(needs.body);                       //Send request
+    });
+  }
+  _handleResponse(request, next, stop, url, requestError = false){
     const response = {
       headers: {},
       status: request.status,
@@ -157,18 +192,8 @@ class Model {
         response.headers[header[0]] = header[1].trim();
       }
     }
-    (request.status >= 300 || request.status === 0) ? stop(response) : next(response);
-  }
-  _executeRequest(needs){
-    return new Promise((next, stop) => {
-      const url = this.url + needs.paramsRequest;
-      const request = new XMLHttpRequest();
-      request.addEventListener("loadend", () => this._handleResponse(request, next, stop, url));     //Handle response
-      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
-      request.open(needs.method, url, true); // true for asynchronous
-      request.setRequestHeader("Content-Type", needs.requestJson ? "application/json" : "application/x-www-form-urlencoded");    //Set header content type
-      request.send(needs.body);                       //Send request
-    });
+    this.progress = null;
+    (request.status >= 300 || request.status === 0 || requestError) ? stop(response) : next(response);
   }
   get(data = {}){
     let paramsRequest = this._setUrl(data);     // Set particular last URL
@@ -178,11 +203,16 @@ class Model {
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "GET",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body: null
     });
   }
@@ -194,11 +224,16 @@ class Model {
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "HEAD",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body: null
     });
   }
@@ -210,12 +245,17 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "POST",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body
     });
   }
@@ -227,12 +267,17 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "PATCH",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body
     });
   }
@@ -244,12 +289,17 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "PUT",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body
     });
   }
@@ -261,12 +311,17 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
-    const body = this._setBody(data.body, data.requestJson);                      // Handle body
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "DELETE",
-      requestJson: data.requestJson,
+      requestType,
       responseType: data.responseType,
       paramsRequest,
+      progress: data.progress,
       body
     });
   }
