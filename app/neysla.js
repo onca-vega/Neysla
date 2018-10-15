@@ -93,29 +93,35 @@ class Model {
   }
   _setUrl(data){
     if(!(data instanceof Object)){
-      data = {};
+      console.error(`Neysla: The model's configuration must be an object.`);
+      return false;
     }
     else if(data.delimiters && !(data.delimiters instanceof Array || typeof data.delimiters === "string" || typeof data.delimiters === "number")){
       console.error(`Neysla: The model's delimiters are not properly defined.`);
       return false;
     }
+
     if(data.delimiters && !(data.delimiters instanceof Array)){
       data.delimiters = [ data.delimiters ];
     }
     else if(!data.delimiters){
       data.delimiters = [];
     }
+
     if(typeof this.name === "string"){
       this.name = [ this.name ];
     }
+
     if(!(this.name.length === data.delimiters.length || this.name.length - 1 === data.delimiters.length)){
       console.error(`Neysla: Incorrect relation between name and delimiters.`);
       return false;
     }
+
     let serviceRequest = "";
     for(let i in this.name){
       serviceRequest += `${ this.name[i] }${ (data.delimiters[i] ? ('/' + data.delimiters[i]) : '') }${ (parseInt(i, 10) === this.name.length - 1 ? this.token ? (`?${ this.token.name }=${ this.token.value }`) : '' : '/') }`;
     }
+
     return serviceRequest;
   }
   _setParams(params){
@@ -192,7 +198,6 @@ class Model {
         response.headers[header[0]] = header[1].trim();
       }
     }
-    this.progress = null;
     (request.status >= 300 || request.status === 0 || requestError) ? stop(response) : next(response);
   }
   get(data = {}){

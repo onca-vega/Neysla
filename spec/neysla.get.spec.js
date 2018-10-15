@@ -66,6 +66,25 @@ describe("Neysla: model GET", () => {
       done();
     });
   });
+  it("should send error 'Neysla: The model's configuration must be an object.'", done => {
+    sinon.spy();
+    const neysla = new Neysla({
+      name: "myService",
+      url: "http://www.my-api-url.com/",
+      token: {
+        name: "access",
+        value: "sdfsdhfpod"
+      }
+    });
+    spyOn(console, "error");
+    neysla.init().then(success => {
+      const service = success.myService.setModel("service");
+      const result = service.get(5);
+      expect(result).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: The model's configuration must be an object.");
+      done();
+    });
+  });
   it("should return a Promise", done => {
     sinon.spy();
     const neysla = new Neysla({
@@ -84,23 +103,6 @@ describe("Neysla: model GET", () => {
     });
   });
   it("should return a Promise 2", done => {
-    sinon.spy();
-    const neysla = new Neysla({
-      name: "myService",
-      url: "http://www.my-api-url.com/",
-      token: {
-        name: "access",
-        value: "sdfsdhfpod"
-      }
-    });
-    neysla.init().then(success => {
-      const service = success.myService.setModel("service");
-      const result = service.get(5);
-      expect(result instanceof Promise).toBe(true);
-      done();
-    });
-  });
-  it("should return a Promise 3", done => {
     sinon.spy();
     const neysla = new Neysla({
       name: "myService",
