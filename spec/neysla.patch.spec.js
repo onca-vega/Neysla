@@ -7,16 +7,16 @@ describe("Neysla: model PATCH", () => {
   afterEach(() => server.restore());
 
   it("should send error of bad initialization of delimiters", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: {}
@@ -27,16 +27,16 @@ describe("Neysla: model PATCH", () => {
     });
   });
   it("should send error of bad initialization of relation between delimiters and static names", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: 5
@@ -47,16 +47,16 @@ describe("Neysla: model PATCH", () => {
     });
   });
   it("should send error of bad initialization of relation between delimiters and static names 2", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, 10, 2, "a"]
@@ -68,16 +68,16 @@ describe("Neysla: model PATCH", () => {
   });
   it("should send error 'Neysla: The model's configuration must be an object.'", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.patch(5);
       expect(result).toBe(false);
@@ -87,15 +87,15 @@ describe("Neysla: model PATCH", () => {
   });
   it("should return a Promise", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.patch();
       expect(result instanceof Promise).toBe(true);
@@ -104,15 +104,15 @@ describe("Neysla: model PATCH", () => {
   });
   it("should return a Promise 2", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.patch({});
       expect(result instanceof Promise).toBe(true);
@@ -121,15 +121,15 @@ describe("Neysla: model PATCH", () => {
   });
   it("should return a Promise 3", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service"]);
       const result = service.patch();
       expect(result instanceof Promise).toBe(true);
@@ -138,15 +138,15 @@ describe("Neysla: model PATCH", () => {
   });
   it("should return a Promise 4", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: ["baz", 6]
@@ -157,15 +157,15 @@ describe("Neysla: model PATCH", () => {
   });
   it("should return a Promise 5", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, "foo", 7]
@@ -186,26 +186,26 @@ describe("Neysla: model PATCH", () => {
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
     server.respondWith("PATCH", "", [ response.status, response.headers, JSON.stringify(response.data)]);
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
-      },
-      body: {
-        name: "My name",
-        age: 25,
-        country: "MX"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, "10"],
         params: {
           "foo": "bar",
           "barz": 5
+        },
+        body: {
+          name: "My name",
+          age: 25,
+          country: "MX"
         }
       });
       server.respond();
@@ -230,15 +230,15 @@ describe("Neysla: model PATCH", () => {
       status: 401
     }
     server.respondWith("PATCH", "", [ response.status, response.headers, ""]);
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.patch({
         delimiters: [5, "10"],

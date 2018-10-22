@@ -1,6 +1,6 @@
 # Neysla
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v2.3.2-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.4.2-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://travis-ci.org/onca-vega/Neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
@@ -66,7 +66,9 @@ ejemplo para una API que queremos modelar:
 Definido lo anterior, tenemos:
 
 ```bash
-const neysla = new Neysla({
+const neysla = new Neysla();
+
+neysla.init({
 
   name: "yourApiModeler",
   token: {
@@ -75,10 +77,11 @@ const neysla = new Neysla({
   },
   url: "https://www.your-api.com/"
 
-}).init();
+});
 ```
 
-Los parámetros para inicializar Neysla son:
+Primero creamos la instancia de Neysla. Posteriormente llamamos al método "init"
+pasando los parámetros para inicializar Neysla, los cuales son:
 
 parámetro | descripción | es requerido | ejemplo
 ------------ | ------------- | ------------ | -------------
@@ -87,8 +90,6 @@ token | Neysla puede lidiar con tokens de Autorización si tu API está protegid
 token.name | El nombre del token con el que será añadido a la URL de tu modelo | si (si el token es definido) | "accessToken"
 token.value | El valor del token de Autorización | si (si el token es definido) | "asodug2312pu312pu3_asodq231"
 url | La liga en donde se consume tu API. Será usada para añadirse al inicio de la URL de cada modelo | si | "https://www.your-api.com/"
-
-Después simplemente llamamos al método "init".
 
 ### Usando Neysla para la definición de modelos
 Es importante saber que Neysla está basado en promesas, por lo que, continuando
@@ -99,7 +100,9 @@ let user = null,
 userContact = null,
 userContactPhone = null;
 
-const neysla = new Neysla({
+const neysla = new Neysla();
+
+neysla.init({
 
   name: "yourApiModeler",
   token: {
@@ -108,8 +111,7 @@ const neysla = new Neysla({
   },
   url: "https://www.your-api.com/"
 
-}).init();
-neysla.then(modelers => {
+}).then(modelers => {
 
   user = modelers.yourApiModeler.setModel("user");
 
@@ -380,7 +382,9 @@ userContact = null;
 let store = null,
 storeElement = null;
 
-const neysla = new Neysla([
+const neysla = new Neysla();
+
+neysla.init([
   {
     name: "yourApiUserModeler",
     token: {
@@ -393,8 +397,7 @@ const neysla = new Neysla([
     name: "yourApiStoreModeler",
     url: "https://www.your-api-store.com/"
   }
-]).init();
-neysla.then(modelers => {
+]).then(modelers => {
 
   user = modelers.yourApiUserModeler.setModel("user");
   userContact = modelers.yourApiUserModeler.setModel([ "user", "contact" ]);

@@ -11,12 +11,12 @@
 // _____________________________________________________________________________
 
 class Neysla {
-  constructor(config){
-    this.config = config;
+  constructor(){
+    this.config = null;
   }
 
-  init(){
-    this.config = this._doError(this.config);
+  init(config){
+    this.config = this._doError(config);
     if(!this.config){
       return false;
     }

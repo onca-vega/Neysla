@@ -7,16 +7,16 @@ describe("Neysla: model GET", () => {
   afterEach(() => server.restore());
 
   it("should send error of bad initialization of delimiters", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: {}
@@ -27,16 +27,16 @@ describe("Neysla: model GET", () => {
     });
   });
   it("should send error of bad initialization of relation between delimiters and static names", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: 5
@@ -47,16 +47,16 @@ describe("Neysla: model GET", () => {
     });
   });
   it("should send error of bad initialization of relation between delimiters and static names 2", done => {
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: [5, 10, 2, "a"]
@@ -68,16 +68,16 @@ describe("Neysla: model GET", () => {
   });
   it("should send error 'Neysla: The model's configuration must be an object.'", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    spyOn(console, "error");
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    spyOn(console, "error");
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.get(5);
       expect(result).toBe(false);
@@ -87,15 +87,15 @@ describe("Neysla: model GET", () => {
   });
   it("should return a Promise", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.get();
       expect(result instanceof Promise).toBe(true);
@@ -104,15 +104,15 @@ describe("Neysla: model GET", () => {
   });
   it("should return a Promise 2", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel("service");
       const result = service.get({});
       expect(result instanceof Promise).toBe(true);
@@ -121,15 +121,15 @@ describe("Neysla: model GET", () => {
   });
   it("should return a Promise 3", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service"]);
       const result = service.get();
       expect(result instanceof Promise).toBe(true);
@@ -138,15 +138,15 @@ describe("Neysla: model GET", () => {
   });
   it("should return a Promise 4", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: ["baz", 6]
@@ -157,15 +157,15 @@ describe("Neysla: model GET", () => {
   });
   it("should return a Promise 5", done => {
     sinon.spy();
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: [5, "foo", 7]
@@ -186,15 +186,15 @@ describe("Neysla: model GET", () => {
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
     server.respondWith("GET", "", [ response.status, response.headers, JSON.stringify(response.data)]);
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: [5, "10"],
@@ -233,11 +233,11 @@ describe("Neysla: model GET", () => {
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
     server.respondWith("GET", "", [ response.status, response.headers, JSON.stringify(response.data)]);
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/"
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: [5, "10"],
@@ -271,15 +271,15 @@ describe("Neysla: model GET", () => {
       status: 404
     }
     server.respondWith("GET", "", [ response.status, response.headers, ""]);
-    const neysla = new Neysla({
+    const neysla = new Neysla();
+    neysla.init({
       name: "myService",
       url: "http://www.my-api-url.com/",
       token: {
         name: "access",
         value: "sdfsdhfpod"
       }
-    });
-    neysla.init().then(success => {
+    }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
       const result = service.get({
         delimiters: [5, "10"],
