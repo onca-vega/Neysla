@@ -14,7 +14,6 @@ class Neysla {
   constructor(){
     this.config = null;
   }
-
   init(config){
     this.config = this._doError(config);
     if(!this.config){
@@ -23,7 +22,6 @@ class Neysla {
     const Service = this._doService(this.config);
     return new Promise(next => next(Service));
   }
-
   _doError(config){
     let valid = true;
     if(!(config instanceof Object || config instanceof Array)){
