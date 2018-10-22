@@ -158,7 +158,7 @@ class Model {
         finalType = "application/json";
         break;
       case "multipart":
-        finalType = "multipart/form-data";
+        finalType = null;
         break;
       default:
         finalType = "application/x-www-form-urlencoded";
@@ -175,7 +175,9 @@ class Model {
       request.addEventListener("load", () => this._handleResponse(request, next, stop, url));     //Handle response
       request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
       request.open(needs.method, url, true); // true for asynchronous
-      request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
+      if(needs.requestType){
+        request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
+      }
       request.send(needs.body);                       //Send request
     });
   }
