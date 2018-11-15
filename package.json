@@ -2,9 +2,8 @@
   "name": "neysla",
   "version": "2.4.3",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
-  "main": "build/neysla.min.js",
+  "main": "app/neysla.js",
   "scripts": {
-    "build": "uglifyjs app/neysla.js --compress --mangle --output build/neysla.min.js --wrap Neysla",
     "test": "karma start",
     "test-travis": "karma start --single-run"
   },
