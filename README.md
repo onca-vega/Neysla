@@ -50,10 +50,168 @@ $ npm install --save neysla
 import Neysla from "neysla";
 ```
 
-## Usage
+## Direct usage
+Neysla has support as direct usage for the HTTP methods:
+- GET
+- HEAD
+- POST
+- PATCH
+- PUT
+- DELETE
+
+#### GET (Neysla's direct usage "get" method)
+```bash
+...
+  Neysla.get({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    responseType: "blob"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+"get" method features for direct usage are:
+
+feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
+url | Link for request | undefined | string
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [responseType] supported for JavaScript requests | "json" | string
+
+#### HEAD (Neysla's direct usage "head" method)
+```bash
+...
+  Neysla.head({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Works just the same as previous method (with HEAD method implies).
+
+#### POST (Neysla's direct usage "post" method)
+```bash
+...
+  Neysla.post({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    headers: {
+      "Authentication": "Basic dufhspo43p43hu34h5p34hu5p34"
+    },
+    requestType: "multipart",
+    body: {
+      "address": "Saint street 177",
+      "active": false,
+      "first_name": "Roberto",
+      "last_name": "Magallanez"
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+"post" method features for direct usage are:
+
+feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
+url | Link for request | undefined | string
+body | Refers to the body of the request | undefined | object
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [responseType] supported for JavaScript requests | "json" | string
+
+#### PATCH (Neysla's direct usage "patch" method)
+```bash
+...
+  Neysla.patch({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    requestType: "multipart",
+    body: {
+      "active": true
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+"patch" method features for direct usage are:
+
+feature | description | default | supporting typeof
+------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
+url | Link for request | undefined | string
+body | Refers to the body of the request | undefined | object
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [responseType] supported for JavaScript requests | "json" | string
+
+#### PUT (Neysla's direct usage "put" method)
+```bash
+...
+  Neysla.put({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Works just the same as previous method.
+
+#### DELETE (Neysla's direct usage "remove" method)
+```bash
+...
+  Neysla.remove({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+"remove" method features for direct usage are:
+
+feature | description | default | supporting type of data
+------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
+url | Link for request | undefined | string
+body | Refers to the body of the request | undefined | object
+requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [responseType] supported for JavaScript requests | "json" | string
+
+### Data transmition progress
+Every request has a method named "progress", that pass the variable defined by
+"progress" native AJAX event:
+```bash
+...
+  const file = document.getElementById("myFile").files[0];
+  Neysla.post({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    headers: {
+      "Authentication": "Basic dufhspo43p43hu34h5p34hu5p34"
+    },
+    requestType: "multipart",
+    body: {
+      file,
+      name: "My file"
+    }
+    progress(progressEv){
+      // Algún código divertido con el evento "progress".
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+### Data response definition
+After we make a request, we'll receive our data defined through the following
+nodes (it's format will depend on the "responseType" param):
+
+node | description | type of data
+------------ | ------------- | ------------
+headers | Response Headers | Object
+status | Response status | number
+statusText | Response status as text | string
+getHeader | Method to get an specific header (needs an string argument) | Function
+data | Response body data | Object
+dataType | Response type | string
+url | Requested URL | string
+
+## Modeler usage
 ### Initializating Neysla
-In order to explain how to use Neysla, let's define some fake resources for an API
-that we want to model:
+In order to explain how to use Neysla as a modeler, let's define some fake
+resources for an API that we want to model:
 1. Our API is under the link "https://www.your-api.com/".
 2. We have three resources on our API:
   - "https://www.your-api.com/user/$user_id", which is defined to interact with
@@ -144,7 +302,7 @@ for the HTTP methods:
 - PUT
 - DELETE
 
-#### GET (Neysla's get method)
+#### GET (Neysla's modeler usage "get" method)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -164,6 +322,7 @@ for the HTTP methods:
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Once we've defined all our models, we can start to deliver all our needed requests.
 On previous example, we've made three GET requests:
 - The first one is receiving an empty Object, that means we are making a GET
@@ -190,6 +349,7 @@ Let's see some other examples:
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 On previous request we are sending delimiters and params to "userContactPhone"
 model, that means we are making a GET request to
 "https://www.your-api.com/user/1/contact/500/phone?page=7&perPage=35&accessToken=asodug2312pu312pu3_asodq231".
@@ -204,7 +364,7 @@ params | Refers to the query params appended to the API resource | undefined | o
 requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### HEAD (Neysla's head method)
+#### HEAD (Neysla's modeler usage "head" method)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -218,9 +378,10 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Works just the same as previous method (with HEAD method implies).
 
-#### POST (Neysla's post method)
+#### POST (Neysla's modeler usage "post" method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -240,6 +401,7 @@ Works just the same as previous method (with HEAD method implies).
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 On previous request we are sending delimiters, params and body to "userContact"
 model, that means we are making a POST request to
 "https://www.your-api.com/user/12/contact?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
@@ -257,7 +419,7 @@ params | Refers to the query params appended to the API resource | undefined | o
 requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### PATCH (Neysla's patch method)
+#### PATCH (Neysla's modeler usage "patch" method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -270,6 +432,7 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 On previous request we are sending delimiters and params to "userContact"
 model, that means we are making a PATCH request to
 "https://www.your-api.com/user/12/contact/210?accessToken=asodug2312pu312pu3_asodq231".
@@ -288,7 +451,7 @@ params | Refers to the query params appended to the API resource | undefined | o
 requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [responseType] supported for JavaScript requests | "json" | string
 
-#### PUT (Neysla's put method)
+#### PUT (Neysla's modeler usage "put" method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -301,9 +464,10 @@ responseType | [responseType] supported for JavaScript requests | "json" | strin
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Works just the same as previous method.
 
-#### DELETE (Neysla's remove method)
+#### DELETE (Neysla's modeler usage "remove" method)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -313,6 +477,7 @@ Works just the same as previous method.
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 On previous request we are sending delimiters to "userContact"
 model, that means we are making a DELETE request to
 "https://www.your-api.com/user/12/contact/210?accessToken=asodug2312pu312pu3_asodq231".
@@ -353,18 +518,7 @@ Every model has a method named "progress", that pass the variable defined by "pr
 ```
 
 ### Data response definition
-After we make a request, we'll receive our data defined through the following
-nodes (it's format will depend on the "responseType" param):
-
-node | description | type of data
------------- | ------------- | ------------
-headers | Response Headers | Object
-status | Response status | number
-statusText | Response status as text | string
-getHeader | Method to get an specific header (needs an string argument) | Function
-data | Response body data | Object
-dataType | Response type | string
-url | Requested URL | string
+Response is defined just like direct usage response.
 
 ### Support for multiple modelers
 You can define one or more modelers in Neysla, for example when you want to
@@ -401,6 +555,7 @@ neysla.init([
 
 }).catch(err => console.log(err));
 ```
+
 And all the previous features are available in every modeler and model defined
 in the last example. In this case, the "yourApiUserModeler" modeler is going to
 work under token Authorization, meanwhile the "yourApiStoreModeler" modeler is

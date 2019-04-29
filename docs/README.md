@@ -53,10 +53,171 @@ $ npm install --save neysla
 import Neysla from "neysla";
 ```
 
-## Uso
+## Uso directo
+Neysla soporta las siguientes métodos para realizar peticiones de forma directa:
+- GET
+- HEAD
+- POST
+- PATCH
+- PUT
+- DELETE
+
+### GET (Método "get" directo de Neysla)
+```bash
+...
+  Neysla.get({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    responseType: "blob"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Las características del método "get" directo son:
+
+características | descripción | valor por defecto | tipo de dato soportado
+------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
+url | Liga a la cual se hará la petición | undefined | string
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
+
+### HEAD (Método "head" directo de Neysla)
+```bash
+...
+  Neysla.head({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Trabaja exactamente igual que el método anterior (con las implicaciones que
+conlleva el método HEAD).
+
+### POST (Método "post" directo de Neysla)
+```bash
+...
+  Neysla.post({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    headers: {
+      "Authentication": "Basic dufhspo43p43hu34h5p34hu5p34"
+    },
+    requestType: "multipart",
+    body: {
+      "address": "Saint street 177",
+      "active": false,
+      "first_name": "Roberto",
+      "last_name": "Magallanez"
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Las características del método "post" directo son:
+
+características | descripción | valor por defecto | tipo de dato soportado
+------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
+url | Liga a la cual se hará la petición | undefined | string
+body | Se refiere al cuerpo de la petición | undefined | object
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
+
+### PATCH (Método "patch" directo de Neysla)
+```bash
+...
+  Neysla.patch({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    requestType: "multipart",
+    body: {
+      "active": true
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Las características del método "patch" directo son:
+
+características | descripción | valor por defecto | tipo de dato soportado
+------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
+url | Liga a la cual se hará la petición | undefined | string
+body | Se refiere al cuerpo de la petición | undefined | object
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
+
+### PUT (Método "put" directo de Neysla)
+```bash
+...
+  Neysla.put({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Trabaja exactamente igual que el método anterior (con las implicaciones que
+conlleva el método PUT).
+
+### DELETE (Método "remove" directo de Neysla)
+```bash
+...
+  Neysla.remove({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue"
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+Las características del método "remove" directo son:
+
+características | descripción | valor por defecto | tipo de dato soportado
+------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
+url | Liga a la cual se hará la petición | undefined | string
+body | Se refiere al cuerpo de la petición | undefined | object
+requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
+responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
+
+### Progreso del envío de datos
+Cada petición cuenta con el método "progress", el cual transmite la variable
+definida por el evento nativo "progress" en AJAX.
+Ejemplo:
+```bash
+...
+  const file = document.getElementById("myFile").files[0];
+  Neysla.post({
+    url: "https://www.your-api.com/your-endpoint?param=paramValue",
+    headers: {
+      "Authentication": "Basic dufhspo43p43hu34h5p34hu5p34"
+    },
+    requestType: "multipart",
+    body: {
+      file,
+      name: "My file"
+    }
+    progress(progressEv){
+      // Algún código divertido con el evento "progress".
+    }
+  }).then(data => console.log(data)).catch(err => console.log(err));
+...
+```
+
+### Definición de la respuesta
+Después de realizar una petición, la respuesta recibida posee las siguientes
+características (el formato que tomen dependerá del parámetro "responseType"):
+
+nodo | descripción | tipo de dato
+------------ | ------------- | ------------
+headers | Encabezado de la respuesta | Object
+status | Estatus de la respuesta | number
+statusText | Estatus de la respuesta como texto | string
+data | La información del cuerpo de la respuesta | Object
+dataType | Tipo de respuesta | string
+url | URL a donde se realizó la petición | string
+getHeader(:headerName) | Método para solicitar un header específico (necesita un argumento tipo string) | function
+
+## Uso como modelador
 ### Inicializando Neysla
-Para poder explicar el uso de Neysla, primero definiremos algunos recursos de
-ejemplo para una API que queremos modelar:
+Para poder explicar el uso de Neysla como modelador, primero definiremos algunos
+recursos de ejemplo para una API que queremos modelar:
 1. Nuestra API es consumible bajo la liga "https://www.your-api.com/".
 2. Tenemos tres recursos en nuestra API:
   - "https://www.your-api.com/user/$user_id", el cual es definido para interactuar
@@ -149,7 +310,7 @@ métodos HTTP son soportados por Neysla:
 - PUT
 - DELETE
 
-#### GET (Método "get" de Neysla)
+#### GET (Método "get" desde un modelo de Neysla)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -169,6 +330,7 @@ métodos HTTP son soportados por Neysla:
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Una vez que hemos definido todos nuestros modelos, podemos comenzar a ejecutar
 todas las peticiones requeridas por nuestra aplicación. En el código anterior
 hicimos tres peticiones GET:
@@ -196,6 +358,7 @@ Ahora veamos otros ejemplos:
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 En la petición anterior estamos enviando "delimiters" y "params" al modelo
 "userContactPhone", esto significa que estamos haciendo una petición GET a
 "https://www.your-api.com/user/1/contact/500/phone?page=7&perPage=35&accessToken=asodug2312pu312pu3_asodq231".
@@ -210,7 +373,7 @@ params | Se refiere a los queryparams añadidos al recurso | undefined | object
 requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
-#### HEAD (Método "head" de Neysla)
+#### HEAD (Método "head" desde un modelo de Neysla)
 ```bash
 ...
   user = modelers.yourApiModeler.setModel("user");
@@ -224,10 +387,11 @@ responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaSc
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Trabaja exactamente igual que el método anterior (con las implicaciones que
 conlleva el método HEAD).
 
-#### POST (Método "post" de Neysla)
+#### POST (Método "post" desde un modelo de Neysla)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -247,6 +411,7 @@ conlleva el método HEAD).
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 En la petición anterior estamos enviando "delimiters", "params" y "body" al modelo
 "userContact", lo que significa que estamos haciendo una petición POST a
 "https://www.your-api.com/user/12/contact?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
@@ -265,7 +430,7 @@ params | Se refiere a los queryparams añadidos al recurso | undefined | object
 requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
-#### PATCH (Petición "patch" de Neysla)
+#### PATCH (Método "patch" desde un modelo de Neysla)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -281,6 +446,7 @@ responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaSc
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 En la petición anterior estamos enviando "delimiters", "params" y "body" al modelo
 "userContact", lo que significa que estamos haciendo una petición PATCH a
 "https://www.your-api.com/user/12/contact/210?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
@@ -299,7 +465,7 @@ params | Se refiere a los queryparams añadidos al recurso | undefined | object
 requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
 responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaScript | "json" | string
 
-#### PUT (Método "put" de Neysla)
+#### PUT (Método "put" desde un modelo de Neysla)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -312,10 +478,11 @@ responseType | [Tipo de respuesta] soportado para las peticiones mediante JavaSc
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 Trabaja exactamente igual que el método anterior (con las implicaciones que
 conlleva el método PUT).
 
-#### DELETE (Neysla's remove method)
+#### DELETE (Método "remove" desde un modelo de Neysla)
 ```bash
 ...
   userContact = modelers.yourApiModeler.setModel([ "user", "contact" ]);
@@ -328,6 +495,7 @@ conlleva el método PUT).
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
 ```
+
 En la petición anterior estamos enviando "delimiters" y "params" al modelo
 "userContact", lo que significa que estamos haciendo una petición DELETE a
 "https://www.your-api.com/user/12/contact/210?foo=bar&accessToken=asodug2312pu312pu3_asodq231".
@@ -368,18 +536,7 @@ Ejemplo:
 ```
 
 ### Definición de la respuesta
-Después de realizar una petición, la respuesta recibida posee las siguientes
-características (el formato que tomen dependerá del parámetro "responseType"):
-
-nodo | descripción | tipo de dato
------------- | ------------- | ------------
-headers | Encabezado de la respuesta | Object
-status | Estatus de la respuesta | number
-statusText | Estatus de la respuesta como texto | string
-data | La información del cuerpo de la respuesta | Object
-dataType | Tipo de respuesta | string
-url | URL a donde se realizó la petición | string
-getHeader(:headerName) | Método para solicitar un header específico (necesita un argumento tipo string) | function
+La respuesta se define igual que en las peticiones de uso directo.
 
 ### Soporte para múltiples modeladores
 Puedes definir uno o más modeladores en Neysla, por ejemplo cuando quieres
@@ -416,6 +573,7 @@ neysla.init([
 
 }).catch(err => console.log(err));
 ```
+
 Y todas las caraterísticas definidas con anterioridad están disponibles en cada
 modelador y modelo definido.
 En este caso, el modelador "yourApiUserModeler" requerirá Autorización, mientras
