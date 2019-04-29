@@ -1,7 +1,7 @@
-import Neysla from "./../app/neysla.js";
+import Neysla from "./../../app/neysla.js";
 const sinon = require("sinon");
 
-describe("Neysla: model REMOVE", () => {
+describe("Neysla: model PUT", () => {
   let server;
   beforeEach(() => server = sinon.createFakeServer());
   afterEach(() => server.restore());
@@ -18,7 +18,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: {}
       });
       expect(result).toBe(false);
@@ -38,7 +38,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: 5
       });
       expect(result).toBe(false);
@@ -58,7 +58,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: [5, 10, 2, "a"]
       });
       expect(result).toBe(false);
@@ -79,7 +79,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.remove(5);
+      const result = service.put(5);
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith("Neysla: The model's configuration must be an object.");
       done();
@@ -97,7 +97,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.remove();
+      const result = service.put();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -114,7 +114,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.remove({});
+      const result = service.put({});
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -131,7 +131,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service"]);
-      const result = service.remove();
+      const result = service.put();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -148,7 +148,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: ["baz", 6]
       });
       expect(result instanceof Promise).toBe(true);
@@ -167,7 +167,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: [5, "foo", 7]
       });
       expect(result instanceof Promise).toBe(true);
@@ -185,7 +185,7 @@ describe("Neysla: model REMOVE", () => {
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
-    server.respondWith("DELETE", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    server.respondWith("PUT", "", [ response.status, response.headers, JSON.stringify(response.data)]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -196,7 +196,7 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: [5, "10"],
         requestType: "multipart",
         params: {
@@ -230,7 +230,7 @@ describe("Neysla: model REMOVE", () => {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
       status: 401
     }
-    server.respondWith("DELETE", "", [ response.status, response.headers, ""]);
+    server.respondWith("PUT", "", [ response.status, response.headers, ""]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -241,8 +241,9 @@ describe("Neysla: model REMOVE", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.remove({
+      const result = service.put({
         delimiters: [5, "10"],
+        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5

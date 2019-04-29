@@ -1,4 +1,4 @@
-import Neysla from "./../app/neysla.js";
+import Neysla from "./../../app/neysla.js";
 
 describe("Neysla init", () => {
   describe("Neysla: base init", () => {

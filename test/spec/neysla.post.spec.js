@@ -1,7 +1,7 @@
-import Neysla from "./../app/neysla.js";
+import Neysla from "./../../app/neysla.js";
 const sinon = require("sinon");
 
-describe("Neysla: model HEAD", () => {
+describe("Neysla: model POST", () => {
   let server;
   beforeEach(() => server = sinon.createFakeServer());
   afterEach(() => server.restore());
@@ -18,7 +18,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: {}
       });
       expect(result).toBe(false);
@@ -38,7 +38,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: 5
       });
       expect(result).toBe(false);
@@ -58,7 +58,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: [5, 10, 2, "a"]
       });
       expect(result).toBe(false);
@@ -79,7 +79,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.head(5);
+      const result = service.post(5);
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith("Neysla: The model's configuration must be an object.");
       done();
@@ -97,7 +97,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.head();
+      const result = service.post();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -114,7 +114,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.head({});
+      const result = service.post({});
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -131,7 +131,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service"]);
-      const result = service.head();
+      const result = service.post();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -148,7 +148,7 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: ["baz", 6]
       });
       expect(result instanceof Promise).toBe(true);
@@ -167,25 +167,25 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: [5, "foo", 7]
       });
       expect(result instanceof Promise).toBe(true);
       done();
     });
   });
-  it("should work with request", done => {
+  it("should work with request response is JSON", done => {
     sinon.spy();
     const response = {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 200,
+      status: 201,
       headers: {
         "Content-Type": "application/json",
         "X-Pagination-Current-Page": 117
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
-    server.respondWith("HEAD", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    server.respondWith("POST", "", [ response.status, response.headers, JSON.stringify(response.data)]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -196,12 +196,17 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: [5, "10"],
         requestType: "multipart",
         params: {
           "foo": "bar",
           "barz": 5
+        },
+        body: {
+          name: "My name",
+          age: 25,
+          country: "MX"
         }
       });
       server.respond();
@@ -213,36 +218,44 @@ describe("Neysla: model HEAD", () => {
         expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
-        expect(success.statusText).toBe("OK");
+        expect(success.statusText).toBe("Created");
         expect(success.url).toBe(response.url);
         done();
       });
     });
   });
-  it("should work with request without token", done => {
+  it("should work with request response is URLENCODED", done => {
     sinon.spy();
     const response = {
-      url: "http://www.my-api-url.com/service/5/model/10/data?foo=bar&barz=5",
-      status: 200,
+      url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
+      status: 201,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         "X-Pagination-Current-Page": 117
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
-    server.respondWith("HEAD", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    server.respondWith("POST", "", [ response.status, response.headers, JSON.stringify(response.data)]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
-      url: "http://www.my-api-url.com/"
+      url: "http://www.my-api-url.com/",
+      token: {
+        name: "access",
+        value: "sdfsdhfpod"
+      }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: [5, "10"],
-        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5
+        },
+        body: {
+          name: "My name",
+          age: 25,
+          country: "MX"
         }
       });
       server.respond();
@@ -254,7 +267,7 @@ describe("Neysla: model HEAD", () => {
         expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
-        expect(success.statusText).toBe("OK");
+        expect(success.statusText).toBe("Created");
         expect(success.url).toBe(response.url);
         done();
       });
@@ -264,9 +277,9 @@ describe("Neysla: model HEAD", () => {
     sinon.spy();
     const response = {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 500
+      status: 401
     }
-    server.respondWith("HEAD", "", [ response.status, response.headers, ""]);
+    server.respondWith("POST", "", [ response.status, response.headers, ""]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -277,9 +290,8 @@ describe("Neysla: model HEAD", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.head({
+      const result = service.post({
         delimiters: [5, "10"],
-        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5
@@ -289,7 +301,7 @@ describe("Neysla: model HEAD", () => {
       result.catch(error => {
         expect(error instanceof Object).toBe(true);
         expect(error.status).toBe(response.status);
-        expect(error.statusText).toBe("Internal Server Error");
+        expect(error.statusText).toBe("Unauthorized");
         expect(error.url).toBe(response.url);
         done();
       });

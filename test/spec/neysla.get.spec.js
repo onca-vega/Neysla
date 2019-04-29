@@ -1,7 +1,7 @@
-import Neysla from "./../app/neysla.js";
+import Neysla from "./../../app/neysla.js";
 const sinon = require("sinon");
 
-describe("Neysla: model PUT", () => {
+describe("Neysla: model GET", () => {
   let server;
   beforeEach(() => server = sinon.createFakeServer());
   afterEach(() => server.restore());
@@ -18,7 +18,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: {}
       });
       expect(result).toBe(false);
@@ -38,7 +38,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: 5
       });
       expect(result).toBe(false);
@@ -58,7 +58,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: [5, 10, 2, "a"]
       });
       expect(result).toBe(false);
@@ -79,7 +79,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.put(5);
+      const result = service.get(5);
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith("Neysla: The model's configuration must be an object.");
       done();
@@ -97,7 +97,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.put();
+      const result = service.get();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -114,7 +114,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.put({});
+      const result = service.get({});
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -131,7 +131,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service"]);
-      const result = service.put();
+      const result = service.get();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -148,7 +148,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: ["baz", 6]
       });
       expect(result instanceof Promise).toBe(true);
@@ -167,7 +167,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: [5, "foo", 7]
       });
       expect(result instanceof Promise).toBe(true);
@@ -178,14 +178,14 @@ describe("Neysla: model PUT", () => {
     sinon.spy();
     const response = {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 204,
+      status: 200,
       headers: {
         "Content-Type": "application/json",
         "X-Pagination-Current-Page": 117
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
-    server.respondWith("PUT", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    server.respondWith("GET", "", [ response.status, response.headers, JSON.stringify(response.data)]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -196,17 +196,12 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: [5, "10"],
-        requestType: "multipart",
+        requestType: "json",
         params: {
           "foo": "bar",
           "barz": 5
-        },
-        body: {
-          name: "My name",
-          age: 25,
-          country: "MX"
         }
       });
       server.respond();
@@ -217,8 +212,53 @@ describe("Neysla: model PUT", () => {
         expect(success.dataType).toBe("json");
         expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
+        expect(success.data[0].id).toBe(response.data[0].id);
+        expect(success.data[0].comment).toBe(response.data[0].comment);
         expect(success.status).toBe(response.status);
-        expect(success.statusText).toBe("No Content");
+        expect(success.statusText).toBe("OK");
+        expect(success.url).toBe(response.url);
+        done();
+      });
+    });
+  });
+  it("should work with request without token", done => {
+    sinon.spy();
+    const response = {
+      url: "http://www.my-api-url.com/service/5/model/10/data?foo=bar&barz=5",
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Pagination-Current-Page": 117
+      },
+      data: [ { "id": 12, "comment": "Hey there" } ]
+    }
+    server.respondWith("GET", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    const neysla = new Neysla();
+    neysla.init({
+      name: "myService",
+      url: "http://www.my-api-url.com/"
+    }).then(success => {
+      const service = success.myService.setModel(["service", "model", "data"]);
+      const result = service.get({
+        delimiters: [5, "10"],
+        requestType: "multipart",
+        params: {
+          "foo": "bar",
+          "barz": 5
+        }
+      });
+      server.respond();
+      result.then(success => {
+        expect(success instanceof Object).toBe(true);
+        expect(success.headers["X-Pagination-Current-Page"]).toBeTruthy();
+        expect(success.headers["Content-Type"]).toBeTruthy();
+        expect(success.dataType).toBe("json");
+        expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
+        expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
+        expect(success.data[0].id).toBe(response.data[0].id);
+        expect(success.data[0].comment).toBe(response.data[0].comment);
+        expect(success.status).toBe(response.status);
+        expect(success.statusText).toBe("OK");
         expect(success.url).toBe(response.url);
         done();
       });
@@ -228,9 +268,9 @@ describe("Neysla: model PUT", () => {
     sinon.spy();
     const response = {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 401
+      status: 404
     }
-    server.respondWith("PUT", "", [ response.status, response.headers, ""]);
+    server.respondWith("GET", "", [ response.status, response.headers, ""]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -241,7 +281,7 @@ describe("Neysla: model PUT", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.put({
+      const result = service.get({
         delimiters: [5, "10"],
         requestType: "json",
         params: {
@@ -253,7 +293,7 @@ describe("Neysla: model PUT", () => {
       result.catch(error => {
         expect(error instanceof Object).toBe(true);
         expect(error.status).toBe(response.status);
-        expect(error.statusText).toBe("Unauthorized");
+        expect(error.statusText).toBe("Not Found");
         expect(error.url).toBe(response.url);
         done();
       });

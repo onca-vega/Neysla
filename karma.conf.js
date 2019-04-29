@@ -13,12 +13,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      './spec/*spec.js',
+      './test/spec/*spec.js',
       './app/neysla.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: [],
+    exclude: [
+      './build/*',
+    ],
 
     webpack: {
       mode: "development",
@@ -42,7 +44,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './spec/*spec.js': ['webpack'],
+      './test/spec/*spec.js': ['webpack'],
       './app/neysla.js': ['webpack']
     },
 

@@ -1,7 +1,7 @@
-import Neysla from "./../app/neysla.js";
+import Neysla from "./../../app/neysla.js";
 const sinon = require("sinon");
 
-describe("Neysla: model POST", () => {
+describe("Neysla: model PATCH", () => {
   let server;
   beforeEach(() => server = sinon.createFakeServer());
   afterEach(() => server.restore());
@@ -18,7 +18,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: {}
       });
       expect(result).toBe(false);
@@ -38,7 +38,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: 5
       });
       expect(result).toBe(false);
@@ -58,7 +58,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: [5, 10, 2, "a"]
       });
       expect(result).toBe(false);
@@ -79,7 +79,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.post(5);
+      const result = service.patch(5);
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith("Neysla: The model's configuration must be an object.");
       done();
@@ -97,7 +97,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.post();
+      const result = service.patch();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -114,7 +114,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel("service");
-      const result = service.post({});
+      const result = service.patch({});
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -131,7 +131,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service"]);
-      const result = service.post();
+      const result = service.patch();
       expect(result instanceof Promise).toBe(true);
       done();
     });
@@ -148,7 +148,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: ["baz", 6]
       });
       expect(result instanceof Promise).toBe(true);
@@ -167,25 +167,25 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: [5, "foo", 7]
       });
       expect(result instanceof Promise).toBe(true);
       done();
     });
   });
-  it("should work with request response is JSON", done => {
+  it("should work with request", done => {
     sinon.spy();
     const response = {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 201,
+      status: 204,
       headers: {
         "Content-Type": "application/json",
         "X-Pagination-Current-Page": 117
       },
       data: [ { "id": 12, "comment": "Hey there" } ]
     }
-    server.respondWith("POST", "", [ response.status, response.headers, JSON.stringify(response.data)]);
+    server.respondWith("PATCH", "", [ response.status, response.headers, JSON.stringify(response.data)]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -196,57 +196,7 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
-        delimiters: [5, "10"],
-        requestType: "multipart",
-        params: {
-          "foo": "bar",
-          "barz": 5
-        },
-        body: {
-          name: "My name",
-          age: 25,
-          country: "MX"
-        }
-      });
-      server.respond();
-      result.then(success => {
-        expect(success instanceof Object).toBe(true);
-        expect(success.headers["X-Pagination-Current-Page"]).toBeTruthy();
-        expect(success.headers["Content-Type"]).toBeTruthy();
-        expect(success.dataType).toBe("json");
-        expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
-        expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
-        expect(success.status).toBe(response.status);
-        expect(success.statusText).toBe("Created");
-        expect(success.url).toBe(response.url);
-        done();
-      });
-    });
-  });
-  it("should work with request response is URLENCODED", done => {
-    sinon.spy();
-    const response = {
-      url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
-      status: 201,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-Pagination-Current-Page": 117
-      },
-      data: [ { "id": 12, "comment": "Hey there" } ]
-    }
-    server.respondWith("POST", "", [ response.status, response.headers, JSON.stringify(response.data)]);
-    const neysla = new Neysla();
-    neysla.init({
-      name: "myService",
-      url: "http://www.my-api-url.com/",
-      token: {
-        name: "access",
-        value: "sdfsdhfpod"
-      }
-    }).then(success => {
-      const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: [5, "10"],
         params: {
           "foo": "bar",
@@ -267,7 +217,7 @@ describe("Neysla: model POST", () => {
         expect(success.getHeader("X-Pagination-Current-Page")).toBe(response.headers["X-Pagination-Current-Page"]);
         expect(success.getHeader("Content-Type")).toBe(response.headers["Content-Type"]);
         expect(success.status).toBe(response.status);
-        expect(success.statusText).toBe("Created");
+        expect(success.statusText).toBe("No Content");
         expect(success.url).toBe(response.url);
         done();
       });
@@ -279,7 +229,7 @@ describe("Neysla: model POST", () => {
       url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
       status: 401
     }
-    server.respondWith("POST", "", [ response.status, response.headers, ""]);
+    server.respondWith("PATCH", "", [ response.status, response.headers, ""]);
     const neysla = new Neysla();
     neysla.init({
       name: "myService",
@@ -290,11 +240,18 @@ describe("Neysla: model POST", () => {
       }
     }).then(success => {
       const service = success.myService.setModel(["service", "model", "data"]);
-      const result = service.post({
+      const result = service.patch({
         delimiters: [5, "10"],
+        requestType: "json",
+        responseType: "text",
         params: {
           "foo": "bar",
           "barz": 5
+        },
+        body: {
+          name: "My name",
+          age: 25,
+          country: "MX"
         }
       });
       server.respond();

@@ -38,20 +38,22 @@ class Neysla {
     }
     if(valid){
       for(let i in config){
-        if(!config[i].name || typeof config[i].name !== "string" || typeof config[i].name === ""){
-          console.error(`Neysla: Initializator with index ${ i } has no properly defined name.`);
-          valid = false;
-        }
-        else if(!config[i].url || typeof config[i].url !== "string" || typeof config[i].url === ""){
-          console.error(`Neysla: Initializator with index ${ i } has no properly defined url.`);
-          valid = false;
-        }
-        else if(!config[i].token || typeof config[i].token !== "object" ||
-        (typeof config[i].token === "object" && config[i].token instanceof Array) ||
-        !config[i].token.name || typeof config[i].token.name !== "string" || typeof config[i].token.name === "" ||
-        !config[i].token.value || typeof config[i].token.value !== "string" || typeof config[i].token.value === ""){
-          console.warn(`Neysla: Initializator with index ${ i } has no properly defined token's name and/or value. Therefore no token will be added to your models`);
-          config[i].token = null;
+        if(config.hasOwnProperty(i)){
+          if(!config[i].name || typeof config[i].name !== "string" || typeof config[i].name === ""){
+            console.error(`Neysla: Initializator with index ${ i } has no properly defined name.`);
+            valid = false;
+          }
+          else if(!config[i].url || typeof config[i].url !== "string" || typeof config[i].url === ""){
+            console.error(`Neysla: Initializator with index ${ i } has no properly defined url.`);
+            valid = false;
+          }
+          else if(!config[i].token || typeof config[i].token !== "object" ||
+          (typeof config[i].token === "object" && config[i].token instanceof Array) ||
+          !config[i].token.name || typeof config[i].token.name !== "string" || typeof config[i].token.name === "" ||
+          !config[i].token.value || typeof config[i].token.value !== "string" || typeof config[i].token.value === ""){
+            console.warn(`Neysla: Initializator with index ${ i } has no properly defined token's name and/or value. Therefore no token will be added to your models`);
+            config[i].token = null;
+          }
         }
       }
     }
