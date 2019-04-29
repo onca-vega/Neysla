@@ -1,6 +1,6 @@
 # Neysla
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v2.4.7-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.5.7-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://travis-ci.org/onca-vega/Neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
@@ -38,12 +38,17 @@ de toda tu aplicación.
 - npm 6+
 
 ### Instalación
-#### Instalación de Neysla mediante npm
+#### Instalación de Neysla mediante CDN
+```bash
+$ <script type="text/javascript" src="https://unpkg.com/neysla@2.5.7/build/cdn/neysla.min.js" charset="utf-8"></script>
+```
+
+#### Instalación de Neysla mediante NPM
 ```bash
 $ npm install --save neysla
 ```
 
-#### Importación de Neysla dentro de tu aplicación:
+##### Importación de Neysla dentro de tu aplicación:
 ```bash
 import Neysla from "neysla";
 ```
@@ -199,6 +204,7 @@ Con lo anterior podemos definir las características del método "get":
 
 características | descripción | valor por defecto | tipo de dato soportado
 ------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
 requestType | "json" para "application/json"; "multipart" para "multipart/form-data"; cualquier otro valor o en su defecto la ausencia de este atributo será "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
@@ -252,6 +258,7 @@ Con lo anterior podemos definir las características del método "post":
 
 características | descripción | valor por defecto | tipo de dato soportado
 ------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
@@ -285,6 +292,7 @@ Con lo anterior podemos definir las características del método "patch":
 
 características | descripción | valor por defecto | tipo de dato soportado
 ------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object
@@ -328,6 +336,7 @@ Con lo anterior podemos definir las características del método "remove":
 
 características | descripción | valor por defecto | tipo de dato soportado
 ------------ | ------------- | ------------ | -------------
+headers | Se refiere a los encabezados que deseas agregar a tu petición | undefined | object
 delimiters | Se refiere a la parte dinámica del recurso consumido | undefined | array O integer O string
 body | Se refiere al cuerpo de la petición | undefined | object
 params | Se refiere a los queryparams añadidos al recurso | undefined | object

@@ -69,7 +69,221 @@ class Neysla {
   _setBuilder(config){
     return new Builder({ url: config.url, token: config.token });
   }
+
+  static _executeRequest(needs){
+    if(!needs.url || typeof needs.url !== "string"){
+      console.error(`Neysla: Request has no properly defined url.`);
+      return false;
+    }
+    return new Promise((next, stop) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener("progress", needs.progress);
+      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, true));
+      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, true));
+      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url));     //Handle response
+      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
+      request.open(needs.method, needs.url, true); // true for asynchronous
+      if(needs.requestType){
+        request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
+      }
+      for(let header in needs.headers){
+        if(needs.headers.hasOwnProperty(header)){
+          request.setRequestHeader(header, needs.headers[header]);    //Set custom headers
+        }
+      }
+      request.send(needs.body);                       //Send request
+    });
+  }
+  static _handleResponse(request, next, stop, url, requestError = false){
+    const response = {
+      headers: {},
+      status: request.status,
+      statusText: request.statusText,
+      getHeader: (t) => request.getResponseHeader(t),
+      data: request.response,
+      dataType: request.responseType,
+      url
+    };
+    let headersArray = request.getAllResponseHeaders().split("\r\n");
+    for(const o of headersArray){
+      if(o !== ""){
+        const header = o.split(":");
+        response.headers[header[0]] = header[1].trim();
+      }
+    }
+    (request.status >= 300 || request.status === 0 || requestError) ? stop(response) : next(response);
+  }
+  static _setBody(body, requestType){
+    let bodyRequest = null;
+    if(body instanceof Object){
+      switch (requestType) {
+        case "json":                                    //Definition of body for JSON
+          bodyRequest = JSON.stringify(body);
+          break;
+        case "multipart":                               //Definition of body for multipart
+          bodyRequest = new FormData();
+          Object.keys(body).forEach(key => bodyRequest.append(key, body[key]));
+          break;
+        default:                                        //Definition of body for x-www-form-urlencoded
+          bodyRequest = "";
+          Object.keys(body).forEach(key => bodyRequest += `${ bodyRequest !== "" ? "&": "" }${ key }=${ body[key] }`);
+      }
+    }
+    return bodyRequest;
+  }
+  static _handleRequest(requestType){
+    let finalType;
+    switch (requestType) {
+      case "json":
+        finalType = "application/json";
+        break;
+      case "multipart":
+        finalType = null;
+        break;
+      default:
+        finalType = "application/x-www-form-urlencoded";
+    }
+    return finalType;
+  }
+
+  static get(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "GET",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body: null
+    });
+  }
+  static head(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "HEAD",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body: null
+    });
+  }
+  static post(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "POST",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body
+    });
+  }
+  static patch(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "PATCH",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body
+    });
+  }
+  static put(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "PUT",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body
+    });
+  }
+  static remove(data = {}){
+    if(!(data instanceof Object)){
+      console.error(`Neysla: The configuration must be an object.`);
+      return false;
+    }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
+    if(!(data.progress instanceof Function)){
+      data.progress = function(){};
+    }
+    const body = this._setBody(data.body, data.requestType);                      // Handle body
+    const requestType = this._handleRequest(data.requestType);
+    return this._executeRequest({
+      method: "DELETE",
+      url: data.url,
+      headers: data.headers,
+      requestType,
+      responseType: data.responseType,
+      progress: data.progress,
+      body
+    });
+  }
 }
+
 class Builder {
   constructor(config){
     this.config = config;
@@ -85,6 +299,7 @@ class Builder {
     return new Model(this.config, name);
   }
 }
+
 class Model {
   constructor(config, name){
     this.token = config.token;
@@ -135,6 +350,45 @@ class Model {
     }
     return paramsRequest;
   }
+  _executeRequest(needs){
+    return new Promise((next, stop) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener("progress", needs.progress);
+      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, true));
+      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, true));
+      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url));     //Handle response
+      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
+      request.open(needs.method, needs.url, true); // true for asynchronous
+      if(needs.requestType){
+        request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
+      }
+      for(let header in needs.headers){
+        if(needs.headers.hasOwnProperty(header)){
+          request.setRequestHeader(header, needs.headers[header]);    //Set custom headers
+        }
+      }
+      request.send(needs.body);                       //Send request
+    });
+  }
+  _handleResponse(request, next, stop, url, requestError = false){
+    const response = {
+      headers: {},
+      status: request.status,
+      statusText: request.statusText,
+      getHeader: (t) => request.getResponseHeader(t),
+      data: request.response,
+      dataType: request.responseType,
+      url
+    };
+    let headersArray = request.getAllResponseHeaders().split("\r\n");
+    for(const o of headersArray){
+      if(o !== ""){
+        const header = o.split(":");
+        response.headers[header[0]] = header[1].trim();
+      }
+    }
+    (request.status >= 300 || request.status === 0 || requestError) ? stop(response) : next(response);
+  }
   _setBody(body, requestType){
     let bodyRequest = null;
     if(body instanceof Object){
@@ -167,41 +421,7 @@ class Model {
     }
     return finalType;
   }
-  _executeRequest(needs){
-    return new Promise((next, stop) => {
-      const url = this.url + needs.paramsRequest;
-      const request = new XMLHttpRequest();
-      request.addEventListener("progress", needs.progress);
-      request.addEventListener("abort", () => this._handleResponse(request, next, stop, url, true));
-      request.addEventListener("error", () => this._handleResponse(request, next, stop, url, true));
-      request.addEventListener("load", () => this._handleResponse(request, next, stop, url));     //Handle response
-      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
-      request.open(needs.method, url, true); // true for asynchronous
-      if(needs.requestType){
-        request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
-      }
-      request.send(needs.body);                       //Send request
-    });
-  }
-  _handleResponse(request, next, stop, url, requestError = false){
-    const response = {
-      headers: {},
-      status: request.status,
-      statusText: request.statusText,
-      getHeader: (t) => request.getResponseHeader(t),
-      data: request.response,
-      dataType: request.responseType,
-      url
-    };
-    let headersArray = request.getAllResponseHeaders().split("\r\n");
-    for(const o of headersArray){
-      if(o !== ""){
-        const header = o.split(":");
-        response.headers[header[0]] = header[1].trim();
-      }
-    }
-    (request.status >= 300 || request.status === 0 || requestError) ? stop(response) : next(response);
-  }
+
   get(data = {}){
     let paramsRequest = this._setUrl(data);     // Set particular last URL
     if(paramsRequest === false){
@@ -210,15 +430,19 @@ class Model {
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "GET",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body: null
     });
@@ -231,15 +455,19 @@ class Model {
     if(data.params instanceof Object){    //  Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "HEAD",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body: null
     });
@@ -252,6 +480,9 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
@@ -259,9 +490,10 @@ class Model {
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "POST",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body
     });
@@ -274,6 +506,9 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
@@ -281,9 +516,10 @@ class Model {
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "PATCH",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body
     });
@@ -296,6 +532,9 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
@@ -303,9 +542,10 @@ class Model {
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "PUT",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body
     });
@@ -318,6 +558,9 @@ class Model {
     if(data.params instanceof Object){                                            // Handle params
       paramsRequest += this._setParams(data.params);
     }
+    if(!(data.headers instanceof Object)){                                        // Handle headers
+      data.headers = {};
+    }
     if(!(data.progress instanceof Function)){
       data.progress = function(){};
     }
@@ -325,9 +568,10 @@ class Model {
     const requestType = this._handleRequest(data.requestType);
     return this._executeRequest({
       method: "DELETE",
+      url: this.url + paramsRequest,
+      headers: data.headers,
       requestType,
       responseType: data.responseType,
-      paramsRequest,
       progress: data.progress,
       body
     });

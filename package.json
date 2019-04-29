@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "2.4.7",
+  "version": "2.5.7",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "build/module/neysla.min.js",
   "scripts": {
@@ -37,10 +37,8 @@
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
-    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "babel-loader": "^8.0.5",
-    "babel-polyfill": "^6.26.0",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "core-js": "^3.0.1",

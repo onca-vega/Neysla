@@ -1,6 +1,6 @@
 # Neysla
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v2.4.7-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v2.5.7-orange.svg)](https://www.npmjs.com/package/neysla)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg)](https://www.npmjs.com/package/neysla)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://travis-ci.org/onca-vega/Neysla)
 [![Coverage Status](https://coveralls.io/repos/github/onca-vega/Neysla/badge.svg?branch=master)](https://coveralls.io/github/onca-vega/Neysla?branch=master)
@@ -35,12 +35,17 @@ only once, in order that you could use them all over your frontend app.
 - npm 6+
 
 ### Installation
-#### Install Neysla through npm
+#### Install Neysla through CDN
+```bash
+$ <script type="text/javascript" src="https://unpkg.com/neysla@2.5.7/build/cdn/neysla.min.js" charset="utf-8"></script>
+```
+
+#### Install Neysla through NPM
 ```bash
 $ npm install --save neysla
 ```
 
-#### Import Neysla inside your app:
+##### Import Neysla inside your app:
 ```bash
 import Neysla from "neysla";
 ```
@@ -193,6 +198,7 @@ So let's talk about "get" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 params | Refers to the query params appended to the API resource | undefined | object
 requestType | "json" for "application/json"; "multipart" for "multipart/form-data"; everything else will be taken as "application/x-www-form-urlencoded" | "application/x-www-form-urlencoded" | string
@@ -244,6 +250,7 @@ So let's talk about "post" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object
@@ -274,6 +281,7 @@ So let's talk about "patch" method features:
 
 feature | description | default | supporting typeof
 ------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object
@@ -313,6 +321,7 @@ So let's talk about "remove" method features:
 
 feature | description | default | supporting type of data
 ------------ | ------------- | ------------ | -------------
+headers | Refers to headers you want to add to your request | undefined | object
 delimiters | Refers to the "dynamic" part to your API resource | undefined | array OR integer OR string
 body | Refers to the body of the request | undefined | object
 params | Refers to the query params appended to the API resource | undefined | object

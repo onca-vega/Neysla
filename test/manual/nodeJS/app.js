@@ -1,5 +1,14 @@
 import Neysla from "./../../../build/module/neysla.min.js";
 
+Neysla.get({
+  url: "https://api.github.com/users"
+}).then(success => {
+  console.log("All users from core", success);
+  if(success.data.length){
+    Neysla.get({ url: `https://api.github.com/users/${ success.data[0].login }` }).then(success2 => console.log("First user from core", success2)).catch(error2 => console.log(error2));
+  }
+}).catch(error => console.log(error));
+
 let users;
 new Neysla().init({
   name: "github",
