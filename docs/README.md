@@ -315,7 +315,7 @@ métodos HTTP son soportados por Neysla:
 ...
   user = modelers.yourApiModeler.setModel("user");
 
-  user.get({}).then(data => console.log(data)).catch(err => console.log(err));
+  user.get().then(data => console.log(data)).catch(err => console.log(err));
 
   user.get({
     delimiters: 10,

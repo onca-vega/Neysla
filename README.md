@@ -188,7 +188,7 @@ Every request has a method named "progress", that pass the variable defined by
       name: "My file"
     }
     progress(progressEv){
-      // Algún código divertido con el evento "progress".
+      // Some funny code to work with "progress" event.
     }
   }).then(data => console.log(data)).catch(err => console.log(err));
 ...
@@ -307,7 +307,7 @@ for the HTTP methods:
 ...
   user = modelers.yourApiModeler.setModel("user");
 
-  user.get({}).then(data => console.log(data)).catch(err => console.log(err));
+  user.get().then(data => console.log(data)).catch(err => console.log(err));
 
   user.get({
     delimiters: 10,
@@ -510,7 +510,7 @@ Every model has a method named "progress", that pass the variable defined by "pr
       name: "My file"
     },
     progress(progressEv){
-      // Some funny code to work with progress event.
+      // Some funny code to work with "progress" event.
     }
   }).then(data => console.log(data)).catch(err => console.log(err));
 
