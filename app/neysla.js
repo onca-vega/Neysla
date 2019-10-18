@@ -77,12 +77,13 @@ class Neysla {
     }
     return new Promise((next, stop) => {
       const request = new XMLHttpRequest();
+      needs.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
       request.addEventListener("progress", needs.progress);
-      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, true));
-      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, true));
-      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url));     //Handle response
-      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
+      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, needs.responseType, true));
+      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, needs.responseType, true));
+      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url, needs.responseType));     //Handle response
       request.open(needs.method, needs.url, true); // true for asynchronous
+      request.responseType = needs.responseType;
       if(needs.requestType){
         request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
       }
@@ -94,13 +95,13 @@ class Neysla {
       request.send(needs.body);                       //Send request
     });
   }
-  static _handleResponse(request, next, stop, url, requestError = false){
+  static _handleResponse(request, next, stop, url, responseType, requestError = false){
     const response = {
       headers: {},
       status: request.status,
       statusText: request.statusText,
       getHeader: (t) => request.getResponseHeader(t),
-      data: request.response,
+      data: (!requestError && responseType === "json" && typeof request.response === "string") ? JSON.parse(request.response) : request.response, // handle IE lack of json responseType
       dataType: request.responseType,
       url
     };
@@ -353,12 +354,13 @@ class Model {
   _executeRequest(needs){
     return new Promise((next, stop) => {
       const request = new XMLHttpRequest();
+      needs.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
       request.addEventListener("progress", needs.progress);
-      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, true));
-      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, true));
-      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url));     //Handle response
-      request.responseType = (needs.responseType && typeof needs.responseType === "string") ? needs.responseType : "json";
+      request.addEventListener("abort", () => this._handleResponse(request, next, stop, needs.url, needs.responseType, true));
+      request.addEventListener("error", () => this._handleResponse(request, next, stop, needs.url, needs.responseType, true));
+      request.addEventListener("load", () => this._handleResponse(request, next, stop, needs.url, needs.responseType));     //Handle response
       request.open(needs.method, needs.url, true); // true for asynchronous
+      request.responseType = needs.responseType;
       if(needs.requestType){
         request.setRequestHeader("Content-Type", needs.requestType);    //Set header content type
       }
@@ -370,13 +372,13 @@ class Model {
       request.send(needs.body);                       //Send request
     });
   }
-  _handleResponse(request, next, stop, url, requestError = false){
+  _handleResponse(request, next, stop, url, responseType, requestError = false){
     const response = {
       headers: {},
       status: request.status,
       statusText: request.statusText,
       getHeader: (t) => request.getResponseHeader(t),
-      data: request.response,
+      data: (!requestError && responseType === "json" && typeof request.response === "string") ? JSON.parse(request.response) : request.response, // handle IE lack of json responseType
       dataType: request.responseType,
       url
     };

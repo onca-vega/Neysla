@@ -3,7 +3,7 @@ Neysla.get({
 }).then(function(success){
   console.log("All users from core", success);
   if(success.data.length){
-    Neysla.get({ url: `https://api.github.com/users/${ success.data[0].login }` }).then(function(success2){
+    Neysla.get({ url: 'https://api.github.com/users/' + success.data[0].login }).then(function(success2){
       console.log("First user from core", success2);
     }).catch(function(error2){
       console.log(error2);
