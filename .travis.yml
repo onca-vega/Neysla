@@ -1,9 +1,11 @@
 language: node_js
 node_js:
     - "10.16.3"
-before_install:
-    - "npm i -g npm"
-    - "export DISPLAY=:99.0"
-    - "sh -e /etc/init.d/xvfb start"
+dist: xenial
+sudo: required
+services:
+    - xvfb
+addons:
+    chrome: stable    
 install: npm install
 script: npm run test-travis
