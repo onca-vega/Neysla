@@ -26,5 +26,7 @@ neysla.init({
         console.log("First user", success2);
       });
     }
-  });
+  }).catch(function(error){
+    console.log(error);
+  });;
 });
