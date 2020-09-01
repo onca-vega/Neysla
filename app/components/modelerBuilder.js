@@ -1,4 +1,4 @@
-const ModelBuilder = require('./ModelBuilder.js');
+const ModelBuilder = require('./modelBuilder.js');
 
 class ModelerBuilder {
   constructor(config){
