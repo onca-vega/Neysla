@@ -53,7 +53,7 @@ describe("Neysla init", () => {
         name: "myService"
       });
       expect(init).toBe(false);
-      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined url.");
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined url.");
     });
   });
 
@@ -66,17 +66,7 @@ describe("Neysla init", () => {
         url: {}
       });
       expect(init).toBe(false);
-      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined url.");
-    });
-    it("url and name should return token warning and init modeler", () => {
-      const neysla = new Neysla();
-      spyOn(console, "warn");
-      const init = neysla.init({
-        name: "myService",
-        url: "http://www.my-api-url.com/"
-      });
-      expect(init instanceof Promise).toBe(true);
-      expect(console.warn).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined token's name and/or value. Therefore no token will be added to your models");
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined url.");
     });
     it("url and name should modeler with name", done => {
       const neysla = new Neysla();
@@ -86,7 +76,6 @@ describe("Neysla init", () => {
         url: "http://www.my-api-url.com/"
       });
       init.then(success => {
-        expect(console.warn).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined token's name and/or value. Therefore no token will be added to your models");
         expect(init instanceof Promise).toBe(true);
         expect(success instanceof Object).toBe(true);
         expect(success.myService instanceof Object).toBe(true);
@@ -95,58 +84,61 @@ describe("Neysla init", () => {
     });
   });
 
-  describe("Neysla: token init", () => {
-    it("token wrong initializated should return 'Neysla: Initializator with index 0 has no properly defined token's name and/or value...'", done => {
+  describe("Neysla: global parameters init", () => {
+    it("invalid headers", () => {
       const neysla = new Neysla();
-      spyOn(console, "warn");
+      spyOn(console, "error");
       const init = neysla.init({
         name: "myService",
         url: "http://www.my-api-url.com/",
-        token: 5
+        headers: 5
       });
-      init.then(success => {
-        expect(console.warn).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined token's name and/or value. Therefore no token will be added to your models");
-        expect(init instanceof Promise).toBe(true);
-        expect(success instanceof Object).toBe(true);
-        expect(success.myService instanceof Object).toBe(true);
-        done();
-      });
+      expect(init).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined headers.");
     });
-    it("token without name should return 'Neysla: Initializator with index 0 has no properly defined token's name and/or value...'", done => {
+    it("invalid body", () => {
       const neysla = new Neysla();
-      spyOn(console, "warn");
+      spyOn(console, "error");
       const init = neysla.init({
         name: "myService",
         url: "http://www.my-api-url.com/",
-        token: {
-          "value": "sdofhdpif"
-        }
+        body: 5
       });
-      init.then(success => {
-        expect(console.warn).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined token's name and/or value. Therefore no token will be added to your models");
-        expect(init instanceof Promise).toBe(true);
-        expect(success instanceof Object).toBe(true);
-        expect(success.myService instanceof Object).toBe(true);
-        done();
-      });
+      expect(init).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined body.");
     });
-    it("token without value should return 'Neysla: Initializator with index 0 has no properly defined token's name and/or value...'", done => {
+    it("invalid params", () => {
       const neysla = new Neysla();
-      spyOn(console, "warn");
+      spyOn(console, "error");
       const init = neysla.init({
         name: "myService",
         url: "http://www.my-api-url.com/",
-        token: {
-          "name": "myModeler"
-        }
+        params: []
       });
-      init.then(success => {
-        expect(console.warn).toHaveBeenCalledWith("Neysla: Initializator with index 0 has no properly defined token's name and/or value. Therefore no token will be added to your models");
-        expect(init instanceof Promise).toBe(true);
-        expect(success instanceof Object).toBe(true);
-        expect(success.myService instanceof Object).toBe(true);
-        done();
+      expect(init).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined params.");
+    });
+    it("invalid requestType", () => {
+      const neysla = new Neysla();
+      spyOn(console, "error");
+      const init = neysla.init({
+        name: "myService",
+        url: "http://www.my-api-url.com/",
+        requestType: []
       });
+      expect(init).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined requestType.");
+    });
+    it("invalid responseType", () => {
+      const neysla = new Neysla();
+      spyOn(console, "error");
+      const init = neysla.init({
+        name: "myService",
+        url: "http://www.my-api-url.com/",
+        responseType: []
+      });
+      expect(init).toBe(false);
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService has no properly defined responseType.");
     });
   });
 
@@ -158,7 +150,7 @@ describe("Neysla init", () => {
         {
           name: "myService",
           url: "http://www.my-api-url.com/",
-          token: {
+          params: {
             name: "access",
             value: "sdfsdhfpod"
           }
@@ -172,27 +164,32 @@ describe("Neysla init", () => {
         }
       ]);
       expect(init).toBe(false);
-      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with index 2 has no properly defined url.");
+      expect(console.error).toHaveBeenCalledWith("Neysla: Initializator with name myService3 has no properly defined url.");
     });
     it("all well initializated", done => {
-      const token = {
-        name: "access",
-        value: "sdfsdhfpod"
-      };
       const neysla = new Neysla();
       const init = neysla.init([
         {
           name: "myService",
           url: "http://www.my-api-url.com/",
-          token
+          params: {
+            name: "access",
+            value: "sdfsdhfpod"
+          }
         },
         {
           name: "myService2",
           url: "http://www.my-api-url2.com",
+          body: {
+            name: "access",
+            value: "sdfsdhfpod"
+          }
         },
         {
           name: "myService3",
           url: "http://www.my-api-url3.com",
+          requestType: "json",
+          responseType: "blob"
         }
       ]);
       init.then(success => {
@@ -200,7 +197,6 @@ describe("Neysla init", () => {
         expect(success.myService instanceof Object).toBe(true);
         expect(success.myService2 instanceof Object).toBe(true);
         expect(success.myService3 instanceof Object).toBe(true);
-        expect(success.myService.getToken()).toBe(token);
         expect(success.myService.setModel instanceof Function).toBe(true);
         done();
       });
@@ -212,7 +208,7 @@ describe("Neysla init", () => {
       const config = {
         name: "myService",
         url: "http://www.my-api-url.com/",
-        token: {
+        params: {
           name: "access",
           value: "sdfsdhfpod"
         }
@@ -225,7 +221,7 @@ describe("Neysla init", () => {
       neysla.init(config).then(success => {
         const service = success.myService.setModel();
         const service2 = success.myService.setModel(2);
-        expect(console.error).toHaveBeenCalledWith("Neysla: The model's name is not properly defined.");
+        expect(console.error).toHaveBeenCalledWith("Neysla: A model's name of myService modeler is not properly defined.");
         expect(service).toBe(false);
         expect(service2).toBe(false);
         done();
@@ -236,7 +232,7 @@ describe("Neysla init", () => {
       neysla.init({
         name: "myService",
         url: "http://www.my-api-url.com/",
-        token: {
+        body: {
           name: "access",
           value: "sdfsdhfpod"
         }
