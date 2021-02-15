@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "3.5.14",
+  "version": "3.5.15",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "build/module/neysla.min.js",
   "scripts": {
