@@ -4,7 +4,6 @@ README.md
 karma.conf.js
 test/
 app/
-build/cdn/
 webpack.config.js
 
 # Logs
