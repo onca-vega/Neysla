@@ -9,7 +9,7 @@
 - [Aquí](https://www.onca-vega.com/portafolio/#/neysla/instalacion) puedes acceder a la documentación de Neysla.
 
 ## Autor
-* **Marcos Jesús Chávez V** - [onca-vega]
+* **Marcos Jesus Chavez V** - [onca-vega](https://onca-vega.com)
 
 ## Licencia
 Licencia MIT.
@@ -20,9 +20,7 @@ Licencia MIT.
 - [Here](https://www.onca-vega.com/en/portafolio/#/neysla/instalacion) you can access to Neysla's documentation.
 
 ## Author
-* **Marcos Jesús Chávez V** - [onca-vega]
+* **Marcos Jesus Chavez V** - [onca-vega](https://onca-vega.com/en/)
 
 ## License
 MIT License.
-
-[onca-vega]: https://onca-vega.com
