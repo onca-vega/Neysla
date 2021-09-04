@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-    - "10.16.3"
+  - "10.16.3"
 dist: xenial
 sudo: required
 services:
-    - xvfb
+  - xvfb
 addons:
-    chrome: stable    
+  chrome: stable
 install: npm install
 script: npm run test-travis
