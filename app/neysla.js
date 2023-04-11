@@ -171,7 +171,9 @@ class Neysla {
   static _setBody(body, requestType) {
     let bodyRequest = null;
 
-    if (body instanceof Object) {
+    if (body instanceof FormData && requestType === "multipart") {
+      bodyRequest = body;
+    } else if (body instanceof Object) {
       switch (requestType) {
         case "json": //Definition of body for JSON
           bodyRequest = JSON.stringify(body);
@@ -495,38 +497,51 @@ class ModelBuilder {
   }
   _setBody(body, requestType) {
     let bodyRequest = null;
-    let bodyComplete = null;
 
-    if (this._body instanceof Object) {
-      // Handle predefined body
-      bodyComplete = { ...this._body };
-    }
+    if (body instanceof FormData && requestType === "multipart") {
+      bodyRequest = body;
 
-    if (body instanceof Object) {
-      // Handle body
-      bodyComplete = { ...bodyComplete, ...body };
-    }
+      if (this._body instanceof Object) {
+        // Handle predefined body
+        for (const key in this._body) {
+          bodyRequest.append(key, this._body[key]);
+        }
+      }
+    } else {
+      let bodyComplete = null;
 
-    if (bodyComplete instanceof Object) {
-      switch (requestType) {
-        case "json": //Definition of body for JSON
-          bodyRequest = JSON.stringify(bodyComplete);
-          break;
-        case "multipart": //Definition of body for multipart
-          bodyRequest = new FormData();
-          Object.keys(bodyComplete).forEach((key) =>
-            bodyRequest.append(key, bodyComplete[key])
-          );
-          break;
-        default:
-          //Definition of body for x-www-form-urlencoded
-          bodyRequest = "";
-          Object.keys(bodyComplete).forEach(
-            (key) =>
-              (bodyRequest += `${bodyRequest !== "" ? "&" : ""}${key}=${
-                bodyComplete[key]
-              }`)
-          );
+      if (this._body instanceof Object && body instanceof Object) {
+        // Handle predefined and custom body
+        bodyComplete = { ...this._body, ...body };
+      } else if (body instanceof Object) {
+        // Handle custom body
+        bodyComplete = { ...body };
+      } else if (this._body instanceof Object) {
+        // Handle predefined body
+        bodyComplete = { ...this._body };
+      }
+
+      if (bodyComplete instanceof Object) {
+        switch (requestType) {
+          case "json": //Definition of body for JSON
+            bodyRequest = JSON.stringify(bodyComplete);
+            break;
+          case "multipart": //Definition of body for multipart
+            bodyRequest = new FormData();
+            Object.keys(bodyComplete).forEach((key) =>
+              bodyRequest.append(key, bodyComplete[key])
+            );
+            break;
+          default:
+            //Definition of body for x-www-form-urlencoded
+            bodyRequest = "";
+            Object.keys(bodyComplete).forEach(
+              (key) =>
+                (bodyRequest += `${bodyRequest !== "" ? "&" : ""}${key}=${
+                  bodyComplete[key]
+                }`)
+            );
+        }
       }
     }
 
