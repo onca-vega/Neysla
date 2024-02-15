@@ -6,7 +6,7 @@ module.exports = {
     index: "./test/manual/nodeJS/app.js",
   },
   devServer: {
-    contentBase: "./build",
+    static: "./build",
     port: 4200,
   },
   module: {

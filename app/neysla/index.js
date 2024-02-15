@@ -5,14 +5,17 @@
  * the browser under MIT license.
  *
  * Author: Marcos Jesús Chávez Vega (onca-vega)
- *   website: https://onca-vega.com
+ *   website: https://yo.onca-vega.com
  * _____________________________________________________________________________
  */
 
-class Neysla {
+export default class Neysla {
+  _config = null;
+
   constructor() {
     this._config = null;
   }
+
   init(config) {
     this._config = config;
 
@@ -304,9 +307,12 @@ class Neysla {
 }
 
 class ModelerBuilder {
+  _config = null;
+
   constructor(config) {
     this.config = config;
   }
+
   setModel(name) {
     if (!(name instanceof Array || typeof name === "string")) {
       console.error(
@@ -320,6 +326,15 @@ class ModelerBuilder {
 }
 
 class ModelBuilder {
+  _modelerName = null;
+  _url = null;
+  _params = null;
+  _headers = null;
+  _requestType = null;
+  _responseType = null;
+  _body = null;
+  _name = null;
+
   constructor(config, name) {
     this._modelerName = config.name;
     this._url = config.url;
@@ -633,5 +648,3 @@ class ModelBuilder {
       : resolve(response);
   }
 }
-
-module.exports = Neysla;

@@ -1,15 +1,17 @@
 {
   "name": "neysla",
-  "version": "3.7.17",
+  "version": "3.7.18",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "build/module/neysla.min.js",
+  "types": "build/module/neysla.d.ts",
   "scripts": {
     "test": "karma start",
     "test-travis": "karma start --single-run",
     "serve": "webpack-dev-server --open",
     "build": "npm run build-module && npm run build-cdn",
-    "build-module": "uglifyjs app/neysla.js --compress --mangle --output build/module/neysla.min.js --wrap Neysla",
-    "build-cdn": "browserify -e app/neysla.js -s Neysla -t [ babelify ] | uglifyjs --compress --mangle --output build/cdn/neysla.min.js"
+    "set-types": "cp -r ./app/neysla/index.d.ts ./build/module/neysla.d.ts",
+    "build-module": "npm run set-types && uglifyjs app/neysla/index.js --compress --mangle reserved=['Neysla'] --output build/module/neysla.min.js",
+    "build-cdn": "browserify -e app/cdn.js -s Neysla -t [ babelify ] | uglifyjs --compress --mangle --output build/cdn/neysla.min.js"
   },
   "repository": {
     "type": "git",
@@ -49,14 +51,13 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage-istanbul-reporter": "^3.0.3",
     "karma-coveralls": "^2.1.0",
-    "karma-firefox-launcher": "^2.1.1",
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
     "karma-webpack": "^5.0.0",
     "sinon": "^11.1.2",
-    "uglify-es": "^3.3.9",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.1.0"
+    "uglify-js": "^3.17.4",
+    "webpack": "^5.90.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.1"
   }
 }
