@@ -10,7 +10,7 @@
  */
 
 class Neysla {
-  _config = null;
+  // _config = null;
 
   constructor() {
     this._config = null;
@@ -307,7 +307,7 @@ class Neysla {
 }
 
 class NeyslaModeler {
-  _config = null;
+  // _config = null;
 
   constructor(config) {
     this.config = config;
@@ -326,14 +326,14 @@ class NeyslaModeler {
 }
 
 class NeyslaModel {
-  _modelerName = null;
-  _url = null;
-  _params = null;
-  _headers = null;
-  _requestType = null;
-  _responseType = null;
-  _body = null;
-  _name = null;
+  // _modelerName = null;
+  // _url = null;
+  // _params = null;
+  // _headers = null;
+  // _requestType = null;
+  // _responseType = null;
+  // _body = null;
+  // _name = null;
 
   constructor(config, name) {
     this._modelerName = config.name;
