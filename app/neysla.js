@@ -9,7 +9,7 @@
  * _____________________________________________________________________________
  */
 
-export default class Neysla {
+class Neysla {
   _config = null;
 
   constructor() {
@@ -114,7 +114,7 @@ export default class Neysla {
     const modelers = {};
 
     for (const o of this._config) {
-      modelers[o.name] = new ModelerBuilder(o);
+      modelers[o.name] = new NeyslaModeler(o);
     }
 
     return modelers;
@@ -306,7 +306,7 @@ export default class Neysla {
   }
 }
 
-class ModelerBuilder {
+class NeyslaModeler {
   _config = null;
 
   constructor(config) {
@@ -321,11 +321,11 @@ class ModelerBuilder {
       return false;
     }
 
-    return new ModelBuilder(this.config, name);
+    return new NeyslaModel(this.config, name);
   }
 }
 
-class ModelBuilder {
+class NeyslaModel {
   _modelerName = null;
   _url = null;
   _params = null;
@@ -648,3 +648,5 @@ class ModelBuilder {
       : resolve(response);
   }
 }
+
+module.exports = Neysla;

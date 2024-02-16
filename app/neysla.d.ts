@@ -1,4 +1,4 @@
-export enum Method {
+export enum NeyslaMethod {
   GET = "GET",
   HEAD = "HEAD",
   POST = "POST",
@@ -7,13 +7,13 @@ export enum Method {
   DELETE = "DELETE",
 }
 
-export enum RequestType {
+export enum NeyslaRequestType {
   JSON = "json",
   MULTIPART = "multipart",
   URLENCODED = "urlencoded",
 }
 
-export enum ResponseType {
+export enum NeyslaResponseType {
   JSON = "json",
   TEXT = "text",
   ARRAYBUFFER = "arraybuffer",
@@ -25,14 +25,24 @@ export enum ResponseType {
 interface Config {
   name: string;
   url: string;
-  headers?: { [string]: string };
-  body?: { [string]: any };
-  params?: { [string]: any };
-  requestType?: RequestType;
-  responseType?: ResponseType;
+  headers?: { [key: string]: string };
+  body?: { [key: string]: any };
+  params?: { [key: string]: any };
+  requestType?: NeyslaRequestType;
+  responseType?: NeyslaResponseType;
 }
 
-interface ModelBuilder {
+export class NeyslaResponse {
+  headers: Config.headers;
+  status: number | string;
+  statusText: string;
+  data: { [key: string]: any } | any;
+  dataType: Config.responseType;
+  url: Config.url;
+  getHeader(t: any): XMLHttpRequest.getHeader;
+}
+
+export class NeyslaModel {
   _modelerName: Config.name;
   _url: Config.url;
   _params: Config.params | null;
@@ -42,32 +52,32 @@ interface ModelBuilder {
   _body: Config.body | null;
   _name: Array<string> | string | null;
 
-  get(data?: { [string]: any }): Promise;
-  head(data?: { [string]: any }): Promise;
-  post(data?: { [string]: any }): Promise;
-  patch(data?: { [string]: any }): Promise;
-  put(data?: { [string]: any }): Promise;
-  remove(data?: { [string]: any }): Promise;
+  get(data?: { [key: string]: any }): Promise<NeyslaResponse>;
+  head(data?: { [key: string]: any }): Promise<NeyslaResponse>;
+  post(data?: { [key: string]: any }): Promise<NeyslaResponse>;
+  patch(data?: { [key: string]: any }): Promise<NeyslaResponse>;
+  put(data?: { [key: string]: any }): Promise<NeyslaResponse>;
+  remove(data?: { [key: string]: any }): Promise<NeyslaResponse>;
 
   _setRequest(
-    data: { [string]: any },
-    method: Method,
+    data: { [key: string]: any },
+    method: NeyslaMethod,
     setBody: boolean
-  ): Promise;
+  ): Promise<NeyslaResponse>;
   _setUrl(delimiters: Array<string | number> | string | number): string;
   _setParams(params: Config.params): string;
   _setHeaders(headers: Config.headers): Config.headers;
   _setRequestType(requestType: Config.requestType): string | null;
   _setBody(body: FormData | Object): FormData | string;
   _executeRequest(needs: {
-    method: Method;
+    method: NeyslaMethod;
     url: Config.url;
     headers: Config.headers;
     body: FormData | string;
     requestType: string | null;
     responseType: string;
     progress: data.progress;
-  }): Promise;
+  }): Promise<NeyslaResponse>;
   _handleResponse(
     request: XMLHttpRequest,
     resolve: Function,
@@ -77,14 +87,14 @@ interface ModelBuilder {
   ): void;
 }
 
-interface ModelerBuilder {
+export class NeyslaModeler {
   _config: null | Config;
-  setModel(name: ModelBuilder._name): ModelBuilder;
+  setModel(name: NeyslaModel._name): NeyslaModel;
 }
 
-export default interface Neysla {
+export default class Neysla {
   _config: null | Config | Array<Config>;
-  init(params: Config): Promise;
+  init(params: Config): Promise<{ [key: string]: NeyslaModeler }>;
   _validate(): boolean;
-  _createModelers(): Array<{ [string]: ModelerBuilder }>;
+  _createModelers(): { [key: string]: NeyslaModeler };
 }

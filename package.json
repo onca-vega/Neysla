@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "build/module/neysla.min.js",
   "types": "build/module/neysla.d.ts",
@@ -9,9 +9,9 @@
     "test-travis": "karma start --single-run",
     "serve": "webpack-dev-server --open",
     "build": "npm run build-module && npm run build-cdn",
-    "set-types": "cp -r ./app/neysla/index.d.ts ./build/module/neysla.d.ts",
-    "build-module": "npm run set-types && uglifyjs app/neysla/index.js --compress --mangle reserved=['Neysla'] --output build/module/neysla.min.js",
-    "build-cdn": "browserify -e app/cdn.js -s Neysla -t [ babelify ] | uglifyjs --compress --mangle --output build/cdn/neysla.min.js"
+    "set-types": "cp -r ./app/neysla.d.ts ./build/module/neysla.d.ts",
+    "build-module": "npm run set-types && uglifyjs app/neysla.js --compress --mangle reserved=['Neysla'] --output build/module/neysla.min.js --wrap Neysla",
+    "build-cdn": "browserify -e app/neysla.js -s Neysla -t [ babelify ] | uglifyjs --compress --mangle --output build/cdn/neysla.min.js"
   },
   "repository": {
     "type": "git",
