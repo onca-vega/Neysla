@@ -9,7 +9,7 @@
  * _____________________________________________________________________________
  */
 
-class Neysla {
+export default class Neysla {
   // _config = null;
 
   constructor() {
@@ -648,5 +648,3 @@ class NeyslaModel {
       : resolve(response);
   }
 }
-
-module.exports = Neysla;

@@ -24,7 +24,7 @@ module.exports = function (config) {
             exclude: [/\.spec\.js$/, /node_modules/],
             use: {
               loader: "istanbul-instrumenter-loader",
-              query: { esModules: true },
+              options: { esModules: true },
             },
           },
         ],

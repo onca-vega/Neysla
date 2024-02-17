@@ -1,3 +1,7 @@
+// 1) Install http-server
+// 2) Run "http-server --port [YOUR_PREFERENCE_PORT]"
+// 3) Access in browser to http://localhost:[YOUR_PREFERENCE_PORT]/test/manual/cdn
+
 Neysla.get({
   url: "https://api.github.com/users",
 })

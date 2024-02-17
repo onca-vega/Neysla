@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "3.8.2",
+  "version": "3.8.3",
   "description": "Promise based HTTP RESTful API resources modeler for the browser",
   "main": "build/module/neysla.min.js",
   "types": "build/module/neysla.d.ts",
@@ -10,8 +10,10 @@
     "serve": "webpack-dev-server --open",
     "build": "npm run build-module && npm run build-cdn",
     "set-types": "cp -r ./app/neysla.d.ts ./build/module/neysla.d.ts",
-    "build-module": "npm run set-types && uglifyjs app/neysla.js --compress --mangle reserved=['Neysla'] --output build/module/neysla.min.js --wrap Neysla",
-    "build-cdn": "browserify -e app/neysla.js -s Neysla -t [ babelify ] | uglifyjs --compress --mangle --output build/cdn/neysla.min.js"
+    "uglify-module": "uglifyjs build/module/neysla.min.js --compress --mangle --output build/module/neysla.min.js",
+    "uglify-cdn": "uglifyjs build/cdn/neysla.min.js --compress --mangle --output build/cdn/neysla.min.js",
+    "build-module": "npm run set-types | npm run uglify-module | rollup app/neysla.js --format umd --name 'Neysla' --file build/module/neysla.min.js",
+    "build-cdn": "npm run uglify-cdn | rollup app/neysla.js --format iife --name 'Neysla' --file build/cdn/neysla.min.js"
   },
   "repository": {
     "type": "git",
@@ -41,8 +43,6 @@
     "@babel/plugin-proposal-export-default-from": "^7.14.5",
     "@babel/preset-env": "^7.15.4",
     "babel-loader": "^8.2.2",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
     "core-js": "^3.17.2",
     "html-webpack-plugin": "^5.3.2",
     "istanbul-instrumenter-loader": "^3.0.1",
@@ -53,8 +53,9 @@
     "karma-coveralls": "^2.1.0",
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
-    "karma-webpack": "^5.0.0",
-    "sinon": "^11.1.2",
+    "karma-webpack": "^5.0.1",
+    "rollup": "^4.12.0",
+    "sinon": "^17.0.1",
     "uglify-js": "^3.17.4",
     "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4",
