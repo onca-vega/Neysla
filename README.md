@@ -16,7 +16,9 @@
 ```js
 // v3
 const result = neysla.init(config);
-if (!result) { /* error */ }
+if (!result) {
+  /* error */
+}
 
 // v4
 try {
@@ -30,10 +32,10 @@ try {
 
 ```js
 // v3 (XHR — case-sensitive)
-response.headers["Content-Type"]
+response.headers["Content-Type"];
 
 // v4 (fetch API — siempre lowercase)
-response.headers["content-type"]
+response.headers["content-type"];
 ```
 
 ### setModel() errores
@@ -41,7 +43,9 @@ response.headers["content-type"]
 ```js
 // v3
 const model = service.setModel(2);
-if (!model) { /* error */ }
+if (!model) {
+  /* error */
+}
 
 // v4
 try {
@@ -59,10 +63,10 @@ Los tests manuales se encuentran en `test/manual/`. Requieren un build previo:
 npm run build
 ```
 
-| Archivo | Descripción | Comando |
-|---|---|---|
-| `test/manual/esm.mjs` | Node.js — ESM | `node test/manual/esm.mjs` |
-| `test/manual/cjs.cjs` | Node.js — CJS | `node test/manual/cjs.cjs` |
+| Archivo                | Descripción        | Comando                                |
+| ---------------------- | ------------------ | -------------------------------------- |
+| `test/manual/esm.mjs`  | Node.js — ESM      | `node test/manual/esm.mjs`             |
+| `test/manual/cjs.cjs`  | Node.js — CJS      | `node test/manual/cjs.cjs`             |
 | `test/manual/cdn.html` | Browser — IIFE/CDN | Servir localmente, abrir en el browser |
 
 Para el test de browser puedes usar cualquier servidor local, por ejemplo:
@@ -84,7 +88,7 @@ Licencia MIT.
 
 ## Documentation
 
-- [Here](https://ingenieria.onca-vega.com/portafolio/#/neysla) you can access Neysla's documentation.
+- [Here](https://ingenieria.onca-vega.com/en/portafolio/#/neysla) you can access Neysla's documentation.
 
 ## Migration from v3 to v4
 
@@ -93,7 +97,9 @@ Licencia MIT.
 ```js
 // v3
 const result = neysla.init(config);
-if (!result) { /* error */ }
+if (!result) {
+  /* error */
+}
 
 // v4
 try {
@@ -107,10 +113,10 @@ try {
 
 ```js
 // v3 (XHR — case-sensitive)
-response.headers["Content-Type"]
+response.headers["Content-Type"];
 
 // v4 (fetch API — always lowercase)
-response.headers["content-type"]
+response.headers["content-type"];
 ```
 
 ## Manual tests
@@ -121,10 +127,10 @@ Manual tests are located in `test/manual/`. They require a build first:
 npm run build
 ```
 
-| File | Description | Command |
-|---|---|---|
-| `test/manual/esm.mjs` | Node.js — ESM | `node test/manual/esm.mjs` |
-| `test/manual/cjs.cjs` | Node.js — CJS | `node test/manual/cjs.cjs` |
+| File                   | Description        | Command                           |
+| ---------------------- | ------------------ | --------------------------------- |
+| `test/manual/esm.mjs`  | Node.js — ESM      | `node test/manual/esm.mjs`        |
+| `test/manual/cjs.cjs`  | Node.js — CJS      | `node test/manual/cjs.cjs`        |
 | `test/manual/cdn.html` | Browser — IIFE/CDN | Serve locally and open in browser |
 
 For the browser test you can use any local server, e.g.:
