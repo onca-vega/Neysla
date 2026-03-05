@@ -1,0 +1,63 @@
+import { describe, it, expect } from "vitest";
+import { Neysla } from "../../src/index";
+import { createFetchMock } from "../mocks/fetch.mock";
+
+describe("Neysla: core PUT", () => {
+  const server = createFetchMock();
+
+  it("should reject with TypeError when config is not an object", async () => {
+    await expect(Neysla.put(4 as any)).rejects.toThrow(
+      "Neysla: The configuration must be an object."
+    );
+  });
+
+  it("should reject with TypeError when url is not defined", async () => {
+    await expect(Neysla.put({} as any)).rejects.toThrow(
+      "Neysla: Request has no properly defined url."
+    );
+  });
+
+  it("should return a Promise", () => {
+    server.respondWith({ status: 200, body: {} });
+    const result = Neysla.put({
+      url: "http://www.my-api-url.com/service?access=sdfsdhfpod",
+    });
+    expect(result).toBeInstanceOf(Promise);
+  });
+
+  it("should work with request", async () => {
+    const responseData = [{ id: 12, comment: "Hey there" }];
+    server.respondWith({
+      status: 200,
+      statusText: "OK",
+      headers: {
+        "content-type": "application/json",
+        "x-pagination-current-page": "117",
+      },
+      body: responseData,
+    });
+
+    const result = await Neysla.put({
+      url: "http://www.my-api-url.com/service/5/model/10/data?access=sdfsdhfpod&foo=bar&barz=5",
+      requestType: "json",
+      body: { name: "My name", age: 25, country: "MX" },
+    });
+
+    expect(result).toBeInstanceOf(Object);
+    expect(result.status).toBe(200);
+    expect(result.statusText).toBe("OK");
+    expect(result.dataType).toBe("json");
+    expect((result.data as typeof responseData)[0].id).toBe(12);
+  });
+
+  it("should reject on error response", async () => {
+    server.respondWith({ status: 401, statusText: "Unauthorized" });
+
+    await expect(
+      Neysla.put({
+        url: "http://www.my-api-url.com/service/5/model/10/data",
+        requestType: "json",
+      })
+    ).rejects.toMatchObject({ status: 401, statusText: "Unauthorized" });
+  });
+});
