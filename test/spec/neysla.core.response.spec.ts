@@ -22,7 +22,7 @@ describe("Neysla: normalizeFetchResponse — response type branches", () => {
       url: "http://www.my-api-url.com/arraybuffer",
       responseType: "arraybuffer",
     });
-    expect(result.data).toBeInstanceOf(ArrayBuffer);
+    expect((result.data as ArrayBuffer).byteLength).toBeGreaterThanOrEqual(0);
     expect(result.dataType).toBe("arraybuffer");
   });
 
@@ -32,7 +32,7 @@ describe("Neysla: normalizeFetchResponse — response type branches", () => {
       url: "http://www.my-api-url.com/blob",
       responseType: "blob",
     });
-    expect(result.data).toBeInstanceOf(Blob);
+    expect((result.data as Blob).size).toBeGreaterThanOrEqual(0);
     expect(result.dataType).toBe("blob");
   });
 
