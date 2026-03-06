@@ -3,7 +3,7 @@
 [![CI](https://github.com/onca-vega/Neysla/actions/workflows/ci.yml/badge.svg)](https://github.com/onca-vega/Neysla/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/onca-vega/Neysla/branch/master/graph/badge.svg)](https://codecov.io/gh/onca-vega/Neysla)
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v4.0.0-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v4.0.1-orange.svg)](https://www.npmjs.com/package/neysla)
 
 ## Documentación
 
@@ -76,6 +76,21 @@ npx serve .
 # Abrir: http://localhost:3000/test/manual/cdn.html
 ```
 
+## Release
+
+Para publicar una nueva versión a npm via GitHub Actions:
+
+```bash
+# 1. Actualizar version en package.json
+npm version patch   # o minor / major
+
+# 2. Empujar el commit y el tag
+git push origin master
+git push origin --tags
+```
+
+El workflow `.github/workflows/publish.yml` se dispara automáticamente con cualquier tag `v*` y publica a npm via Trusted Publishing (sin token).
+
 ## Autor
 
 - **Marcos Jesus Chavez V** - [onca-vega](https://yo.onca-vega.com)
@@ -139,6 +154,21 @@ For the browser test you can use any local server, e.g.:
 npx serve .
 # Open: http://localhost:3000/test/manual/cdn.html
 ```
+
+## Release
+
+To publish a new version to npm via GitHub Actions:
+
+```bash
+# 1. Update version in package.json
+npm version patch   # or minor / major
+
+# 2. Push the commit and the tag
+git push origin master
+git push origin --tags
+```
+
+The `.github/workflows/publish.yml` workflow triggers automatically on any `v*` tag and publishes to npm via Trusted Publishing (no token required).
 
 ## Author
 
