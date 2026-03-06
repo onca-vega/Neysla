@@ -26,15 +26,18 @@ export function createXHRMock(response: XHRMockResponse) {
     getResponseHeader: vi.fn((name: string) => response.headers?.[name] ?? null),
   };
 
-  // Simula que el evento 'load' se dispara al llamar send()
+  // Simula que el evento 'load' se dispara sincrónicamente al llamar send()
   xhrInstance.send.mockImplementation(() => {
     const loadCb = (xhrInstance.addEventListener.mock.calls as Array<[string, () => void]>).find(
       ([event]) => event === "load"
     )?.[1];
-    if (loadCb) setTimeout(loadCb, 0);
+    if (loadCb) loadCb();
   });
 
-  vi.stubGlobal("XMLHttpRequest", vi.fn(() => xhrInstance));
+  function XHRConstructor() {
+    return xhrInstance;
+  }
+  vi.stubGlobal("XMLHttpRequest", XHRConstructor);
 
   return xhrInstance;
 }
