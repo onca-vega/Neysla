@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Promise based HTTP RESTful API resources modeler for browser and Node 18+",
   "type": "module",
   "main": "./dist/cjs/index.cjs",
