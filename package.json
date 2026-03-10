@@ -1,6 +1,6 @@
 {
   "name": "neysla",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Promise based HTTP RESTful API resources modeler for browser and Node 18+",
   "type": "module",
   "main": "./dist/cjs/index.cjs",
@@ -47,13 +47,15 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "dependencies": {
+    "tslib": "^2.8.1"
+  },
   "devDependencies": {
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^25.0.1",
     "rollup": "^4.12.0",
-    "tslib": "^2.8.1",
     "typescript": "^5.7.3",
     "vitest": "^4.0.18"
   }

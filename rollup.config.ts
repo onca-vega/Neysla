@@ -11,6 +11,7 @@ export default defineConfig([
   // ESM — tree-shakeable, para bundlers modernos
   {
     input,
+    external: ["tslib"],
     output: {
       dir: "dist/esm",
       format: "esm",
