@@ -10,6 +10,7 @@ export interface RequestNeeds {
   requestType: string | null;
   responseType: NeyslaResponseType;
   progress?: (event: ProgressEvent) => void;
+  credentials?: RequestCredentials;
 }
 
 const isBrowser = typeof window !== "undefined";
@@ -33,6 +34,7 @@ function executeFetch<T>(needs: RequestNeeds): Promise<NeyslaResponse<T>> {
     method: needs.method,
     headers,
     body: needs.body ?? undefined,
+    credentials: needs.credentials,
   }).then(async (response) => {
     const normalized = await normalizeFetchResponse<T>(
       response,
@@ -81,6 +83,7 @@ function executeXHR<T>(needs: RequestNeeds): Promise<NeyslaResponse<T>> {
     request.addEventListener("abort", handleError);
 
     request.open(needs.method, needs.url, true);
+    request.withCredentials = needs.credentials === "include";
 
     // XHR solo soporta estos responseTypes nativamente
     const xhrResponseType = needs.responseType === "stream" ? "" : needs.responseType;

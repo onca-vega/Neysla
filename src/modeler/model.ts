@@ -27,6 +27,7 @@ export class NeyslaModel {
   readonly #baseRequestType: NeyslaRequestType | null;
   readonly #baseResponseType: NeyslaResponseType | null;
   readonly #baseBody: Record<string, unknown> | null;
+  readonly #baseCredentials: RequestCredentials | null;
   readonly #name: string[];
 
   constructor(config: NeyslaConfig, name: string | string[]) {
@@ -40,6 +41,7 @@ export class NeyslaModel {
     this.#baseResponseType = config.responseType ?? null;
     this.#baseBody =
       config.body && Object.keys(config.body).length ? config.body : null;
+    this.#baseCredentials = config.credentials ?? null;
     this.#name = Array.isArray(name) ? name : [name];
   }
 
@@ -113,6 +115,7 @@ export class NeyslaModel {
       requestType,
       responseType,
       progress: options.progress,
+      credentials: options.credentials ?? this.#baseCredentials ?? undefined,
     });
   }
 

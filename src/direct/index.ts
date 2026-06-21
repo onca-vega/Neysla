@@ -52,6 +52,7 @@ function setDirectRequest<T = unknown>(
     requestType,
     responseType,
     progress: options.progress,
+    credentials: options.credentials,
   });
 }
 

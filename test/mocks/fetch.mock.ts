@@ -20,6 +20,9 @@ export function createFetchMock() {
   });
 
   return {
+    getMock() {
+      return fetchMock;
+    },
     respondWith(options: MockResponseOptions) {
       const { status, statusText = "", headers = {}, body } = options;
       const bodyStr =

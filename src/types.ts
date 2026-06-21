@@ -27,6 +27,7 @@ export interface NeyslaConfig {
   params?: Record<string, string | number>;
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
+  credentials?: RequestCredentials;
 }
 
 export interface NeyslaRequestOptions {
@@ -37,6 +38,7 @@ export interface NeyslaRequestOptions {
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
   progress?: (event: ProgressEvent) => void;
+  credentials?: RequestCredentials;
 }
 
 export interface NeyslaModelRequestOptions {
@@ -47,6 +49,7 @@ export interface NeyslaModelRequestOptions {
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
   progress?: (event: ProgressEvent) => void;
+  credentials?: RequestCredentials;
 }
 
 export interface NeyslaResponse<T = unknown> {
