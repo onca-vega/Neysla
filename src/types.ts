@@ -11,6 +11,16 @@ export type NeyslaMethod =
 
 export type NeyslaRequestType = "json" | "multipart" | "urlencoded";
 
+/**
+ * Query param values. Arrays serialize as a repeated key (?k=a&k=b), the
+ * shape most backends expect for multi-value params — not a comma-joined
+ * string. See core/params.ts::buildQueryString.
+ */
+export type NeyslaParams = Record<
+  string,
+  string | number | boolean | Array<string | number>
+>;
+
 export type NeyslaResponseType =
   | "json"
   | "text"
@@ -24,7 +34,7 @@ export interface NeyslaConfig {
   url: string;
   headers?: Record<string, string>;
   body?: Record<string, unknown>;
-  params?: Record<string, string | number>;
+  params?: NeyslaParams;
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
   credentials?: RequestCredentials;
@@ -34,7 +44,7 @@ export interface NeyslaRequestOptions {
   url: string;
   headers?: Record<string, string>;
   body?: Record<string, unknown> | FormData;
-  params?: Record<string, string | number>;
+  params?: NeyslaParams;
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
   progress?: (event: ProgressEvent) => void;
@@ -45,7 +55,7 @@ export interface NeyslaModelRequestOptions {
   delimiters?: string | number | Array<string | number>;
   headers?: Record<string, string>;
   body?: Record<string, unknown> | FormData;
-  params?: Record<string, string | number>;
+  params?: NeyslaParams;
   requestType?: NeyslaRequestType;
   responseType?: NeyslaResponseType;
   progress?: (event: ProgressEvent) => void;

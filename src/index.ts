@@ -10,4 +10,5 @@ export type {
   NeyslaMethod,
   NeyslaRequestType,
   NeyslaResponseType,
+  NeyslaParams,
 } from "./types";

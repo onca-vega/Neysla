@@ -1,5 +1,6 @@
 import { executeRequest } from "../core/request";
 import { serializeBody } from "../core/body";
+import { buildQueryString } from "../core/params";
 import type {
   NeyslaRequestOptions,
   NeyslaResponse,
@@ -43,10 +44,11 @@ function setDirectRequest<T = unknown>(
     options.responseType && typeof options.responseType === "string"
       ? options.responseType
       : "json";
+  const url = options.url + buildQueryString(options.params);
 
   return executeRequest<T>({
     method,
-    url: options.url,
+    url,
     headers: options.headers ?? {},
     body,
     requestType,

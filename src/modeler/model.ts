@@ -1,11 +1,13 @@
 import { executeRequest } from "../core/request";
 import { mergeBody } from "../core/body";
+import { buildQueryString } from "../core/params";
 import type {
   NeyslaConfig,
   NeyslaModelRequestOptions,
   NeyslaResponse,
   NeyslaResponseType,
   NeyslaRequestType,
+  NeyslaParams,
 } from "../types";
 
 function resolveContentType(requestType?: NeyslaRequestType | null): string | null {
@@ -22,7 +24,7 @@ function resolveContentType(requestType?: NeyslaRequestType | null): string | nu
 export class NeyslaModel {
   readonly #modelerName: string;
   readonly #baseUrl: string;
-  readonly #baseParams: Record<string, string | number> | null;
+  readonly #baseParams: NeyslaParams | null;
   readonly #baseHeaders: Record<string, string> | null;
   readonly #baseRequestType: NeyslaRequestType | null;
   readonly #baseResponseType: NeyslaResponseType | null;
@@ -154,19 +156,12 @@ export class NeyslaModel {
     return base + relative;
   }
 
-  #buildParams(requestParams?: Record<string, string | number>): string {
-    const merged: Record<string, string | number> = {
+  #buildParams(requestParams?: NeyslaParams): string {
+    const merged: NeyslaParams = {
       ...(this.#baseParams ?? {}),
       ...(requestParams ?? {}),
     };
-
-    if (Object.keys(merged).length === 0) return "";
-
-    const search = new URLSearchParams();
-    for (const [key, value] of Object.entries(merged)) {
-      search.append(key, String(value));
-    }
-    return "?" + search.toString();
+    return buildQueryString(merged);
   }
 
   #buildHeaders(requestHeaders?: Record<string, string>): Record<string, string> {
