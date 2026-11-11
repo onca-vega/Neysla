@@ -93,7 +93,7 @@ El workflow `.github/workflows/publish.yml` se dispara automáticamente con cual
 
 ## Autor
 
-- **Marcos Jesus Chavez V** - [onca-vega](https://yo.onca-vega.com)
+- **Marcos Jesus Chavez V** - [onca-vega](https://www.onca-vega.com/)
 
 ## Licencia
 
@@ -172,7 +172,7 @@ The `.github/workflows/publish.yml` workflow triggers automatically on any `v*` 
 
 ## Author
 
-- **Marcos Jesus Chavez V** - [onca-vega](https://yo.onca-vega.com)
+- **Marcos Jesus Chavez V** - [onca-vega](https://www.onca-vega.com/)
 
 ## License
 
