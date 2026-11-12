@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/onca-vega/Neysla/issues"
   },
-  "homepage": "https://github.com/onca-vega/Neysla#readme",
+  "homepage": "https://www.onca-vega.com/aplicaciones/neysla/",
   "engines": {
     "node": ">=18.0.0"
   },
