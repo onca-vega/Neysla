@@ -3,11 +3,11 @@
 [![CI](https://github.com/onca-vega/Neysla/actions/workflows/ci.yml/badge.svg)](https://github.com/onca-vega/Neysla/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/onca-vega/Neysla/branch/master/graph/badge.svg)](https://codecov.io/gh/onca-vega/Neysla)
 [![NPM](https://nodei.co/npm/neysla.png?mini=true)](https://www.npmjs.com/package/neysla)
-[![Node version](https://img.shields.io/badge/package-v4.0.1-orange.svg)](https://www.npmjs.com/package/neysla)
+[![Node version](https://img.shields.io/badge/package-v4.3.2-orange.svg)](https://www.npmjs.com/package/neysla)
 
 ## Documentación
 
-- [Aquí](https://ingenieria.onca-vega.com/portafolio/#/neysla) puedes acceder a la documentación de Neysla.
+- [Aquí](https://www.onca-vega.com/aplicaciones/neysla/) puedes acceder a la documentación de Neysla.
 
 ## Migración de v3 a v4
 
@@ -103,7 +103,7 @@ Licencia MIT.
 
 ## Documentation
 
-- [Here](https://ingenieria.onca-vega.com/en/portafolio/#/neysla) you can access Neysla's documentation.
+- [Here](https://www.onca-vega.com/en/aplicaciones/neysla/) you can access Neysla's documentation.
 
 ## Migration from v3 to v4
 
